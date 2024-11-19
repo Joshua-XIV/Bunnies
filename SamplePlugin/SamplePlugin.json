@@ -6,7 +6,8 @@
     "ApplicableVersion": "any",
     "DalamudApiLevel": 11,
     "TestingDalamudApiLevel": 10,
-    "Tags": ["cats"],
+    "Tags": [ "cats" ],
     "SupportsProfiles": true,
-    "IconUrl": "https://raw.githubusercontent.com/Josh-Hdz956/Josh/master/Data/WillowLaptop.jpg"
+    "IconUrl": "https://raw.githubusercontent.com/Josh-Hdz956/Josh/master/Data/WillowLaptop.jpg",
+    "RepoUrl": "https://github.com/Josh-Hdz956/Josh"
 }
