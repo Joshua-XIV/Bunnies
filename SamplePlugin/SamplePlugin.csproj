@@ -36,4 +36,10 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content> 
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SamplePlugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
