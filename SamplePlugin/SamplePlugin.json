@@ -1,4 +1,3 @@
-
 {
     "Author": "Joshua",
     "Name": "Josh's Three Cute Gatos",
@@ -8,7 +7,7 @@
     "ApplicableVersion": "any",
     "DalamudApiLevel": 11,
     "Tags": [ "cats" ],
-    "IconUrl": "https://raw.githubusercontent.com/Josh-Hdz956/Josh/master/Data/WillowLaptop.jpg",
-    "RepoUrl": "https://github.com/Josh-Hdz956/Josh"
+    "IconUrl": "https://github.com/raw/TestPlugin/raw/master/Data/WillowLaptop.jpg",
+    "RepoUrl": "https://github.com/AloneXIV/TestPlugin"
 }
 
