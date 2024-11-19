@@ -4,7 +4,7 @@
     "Name": "Josh's Three Cute Gatos",
     "Punchline": "THREE KITTIES!",
     "Description": "A plugin that has my cats",
-    "InternalName": "Josh's Three Cute Gatos",
+    "InternalName": "SamplePlugin",
     "ApplicableVersion": "any",
     "DalamudApiLevel": 11,
     "Tags": [ "cats" ],
