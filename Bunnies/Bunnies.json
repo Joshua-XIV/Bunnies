@@ -1,0 +1,14 @@
+{
+    "Author": "Josh",
+    "Name": "Bunnies",
+    "Punchline": "Where's the coffer at Bunny!'",
+    "Description": "This plugin will automatically take you to Pyros and farm the Low Level Bunny Fate. Other zones are currently WIP.",
+    "InternalName": "Bunnies",
+    "ApplicableVersion": "any",
+    "AssemblyVersion":  "0.0.0.2",
+    "DalamudApiLevel": 11,
+    "Tags": [ "Bunnies, Eureka", "Gil" ],
+    "IconUrl": "",
+    "RepoUrl": "https://github.com/Joshua-XIV"
+}
+
