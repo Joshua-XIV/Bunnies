@@ -74,7 +74,7 @@ public class Plugin : IDalamudPlugin
         config = EzConfig.Init<Config>();
 
         // Toast
-        clipboardPath = Path.Combine(Svc.PluginInterface.AssemblyLocation.Directory?.FullName!, "greyClipboardNoBg.png");
+
         // IPC's
         taskManager = new();
         autoRetainer = new();

@@ -4,7 +4,7 @@
     <Import Project="Dalamud.Plugin.Bootstrap.targets" />
 
     <PropertyGroup>
-    <Version>0.0.0.1</Version>
+    <Version>0.0.0.4</Version>
     <Description>Fun Personal Project for Automating Bunnies</Description>
     <PackageProjectUrl>https://github.com/Joshua-XIV</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
@@ -28,11 +28,6 @@
         <Content Include="..\Bunnies\Bunnies.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Serilog" Version="4.2.1-dev-02337" />
-      <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     </ItemGroup>
     
 </Project>

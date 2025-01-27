@@ -8,21 +8,6 @@
         "resolved": "11.0.0",
         "contentHash": "bjT7XUlhIJSmsE/O76b7weUX+evvGQctbQB8aKXt94o+oPWxHpCepxAGMs7Thow3AzCyqWs7cOpp9/2wcgRRQA=="
       },
-      "Serilog": {
-        "type": "Direct",
-        "requested": "[4.2.1-dev-02337, )",
-        "resolved": "4.2.1-dev-02337",
-        "contentHash": "Z/9dysE96W13j3hezabI2tFwQ/uNfqt/c5UBaj72BLFxP/R3MorhJy16xXC99uRg8+8c7W2sdB25yXLZWuE2rg=="
-      },
-      "Serilog.Sinks.File": {
-        "type": "Direct",
-        "requested": "[6.0.0, )",
-        "resolved": "6.0.0",
-        "contentHash": "lxjg89Y8gJMmFxVkbZ+qDgjl+T4yC5F7WSLTvA+5q0R04tfKVLRL/EHpYoJ/MEQd2EeCKDuylBIVnAYMotmh2A==",
-        "dependencies": {
-          "Serilog": "4.0.0"
-        }
-      },
       "autoretainerapi": {
         "type": "Project",
         "dependencies": {
