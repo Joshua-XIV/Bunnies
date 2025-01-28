@@ -112,10 +112,6 @@ namespace FirstPlugin.Scheduler
                                 P.taskManager.Enqueue(() => CurrentZoneID() == Kugane);
                                 P.taskManager.Enqueue(PlayerNotBusy);
                                 P.taskManager.EnqueueDelay(1000);
-                                TaskMoveTo.Enqueue(AethernetPier1, "Pier1 Aethernet", 1f);
-                                TaskUseAethernet.Enqueue("Kogane Dori Markets");
-                                TaskMoveTo.Enqueue(SummoningBell, "SummoningBell", 1f);
-                                TaskUseRetainer.Enqueue();
                             }
                             else if (ZoneID == Pagos)
                             {
@@ -161,7 +157,7 @@ namespace FirstPlugin.Scheduler
                                         TaskPluginLog.Enqueue("Inside Bunny Fate");
                                         PyrosTargetingHandler.Enqueue();
                                         TaskMounting.Enqueue();
-                                        P.taskManager.Enqueue(() => HasBunnyStatus(), configuration: DConfig);
+                                        P.taskManager.Enqueue(() => HasBunnyStatus());
                                         TaskPluginLog.Enqueue("Finidng Coffer");
                                     }
 

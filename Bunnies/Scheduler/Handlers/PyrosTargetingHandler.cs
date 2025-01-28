@@ -23,36 +23,29 @@ namespace FirstPlugin.Scheduler.Handlers
         internal static bool PyrosFateTargeting()
         {
             IGameObject gameObject;
+            TryGetClosestPyrosTarget(out gameObject);
+            Svc.Targets.SetTarget(gameObject);
             if (Svc.ClientState.LocalPlayer!.IsDead)
                 return true;
 
             if (!IsInFate())
                 return true;
-
-            if (Svc.Targets.Target.Name.ToString() == PyrosTargetTable[2] && Svc.Targets.Target.IsDead)
+            
+            if (gameObject.Name.ToString() == PyrosTargetTable[2] && gameObject.IsDead)
             {
                 return true;
             }
 
-            else if (Svc.Targets.Target != null)
+            else if (DistanceToHitboxEdge(gameObject.HitboxRadius, gameObject) > SetAIRange() && !gameObject.IsDead)
             {
-                if (GetDistanceToPlayer(Svc.Targets.Target.Position) > SetAIRange() && !Svc.Targets.Target.IsDead)
-                {
-                    if (!IsMoving())
-                        P.navmesh.PathfindAndMoveTo(Svc.Targets.Target.Position, false);
-                    else
-                        P.navmesh.Stop();
-                }
-                else
-                    P.navmesh.Stop();
+                if (!P.navmesh.PathfindInProgress() && !IsMoving() && !gameObject.IsDead && DistanceToHitboxEdge(gameObject.HitboxRadius, gameObject) > SetAIRange())
+                    P.navmesh.PathfindAndMoveTo(gameObject.Position, false);
                 return false;
             }
 
-            else if(Svc.Targets.Target == null)
+            else
             {
-                TryGetClosestPyrosTarget(out gameObject);
-                Svc.Targets.SetTarget(gameObject);
-                return false;
+                P.navmesh.Stop();
             }
 
             return false;

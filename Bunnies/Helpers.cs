@@ -63,11 +63,11 @@ public static unsafe class Helpers
         RunCommand("bmrai followcombat on");
         RunCommand("bmrai followoutofcombat on");
         RunCommand($"bmrai maxdistancetarget {SetAIRange()}");
-    }
+    }//
     public static float SetAIRange()
     {
         var x = GetClassJobID();
-        float range = 2.6f;
+        float range = 2.5f;
         switch(x)
         {
             case 7 or 25 or 33 or 35 or 42 or 26 or 27:
@@ -75,7 +75,7 @@ public static unsafe class Helpers
                 break;
 
             default:
-                range = 2.6f;
+                range = 2.5f;
                 break;
         }
         return range;
@@ -646,8 +646,10 @@ public static unsafe class Helpers
     internal static unsafe float GetDistanceToPlayer(IGameObject gameObject) => GetDistanceToPlayer(gameObject.Position);
     public static float GetDistanceToPoint(float x, float y, float z) => Vector3.Distance(Svc.ClientState.LocalPlayer?.Position ?? Vector3.Zero, new Vector3(x, y, z));
     public static float GetDistanceToVectorPoint(Vector3 location) => Vector3.Distance(Svc.ClientState.LocalPlayer?.Position ?? Vector3.Zero, location);
-
-#endregion Distance
+    public static unsafe float DistanceToHitboxEdge(float hitboxRadius, IGameObject gameObject) => GetDistanceToPlayer(gameObject) - hitboxRadius;
+    public static unsafe bool IsInMeleeRange(float hitboxRadius, IGameObject gameobject)
+        => DistanceToHitboxEdge(hitboxRadius, gameobject) < 2.5;
+    #endregion Distance
 
 #region Targeting
     internal static bool TryGetObjectByName(string name, out IGameObject? gameobject) => (gameobject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.Name.ToString() == name)) != null;
@@ -655,10 +657,21 @@ public static unsafe class Helpers
     internal static bool TryGetClosestEnemy(out IGameObject? gameObject) => (gameObject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.IsTargetable == true && x.IsHostile() == true)) != null;
     internal static bool TryGetClosestCoffer(out IGameObject? gameObject) => (gameObject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.IsTargetable == true && 
                                                                              (x.Name.ToString() == CofferTable[0] || x.Name.ToString() == CofferTable[1] || x.Name.ToString() == CofferTable[2]))) != null;
-    internal static bool TryGetClosestPyrosTarget(out IGameObject? gameObject) => (gameObject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.IsTargetable == true && x.IsHostile() == true && x.IsDead == false &&
-                                                                         (x.Name.ToString() == PyrosTargetTable[0] || x.Name.ToString() == PyrosTargetTable[1] || x.Name.ToString() == PyrosTargetTable[2]))) != null;
-    internal static bool TryGetFateBoss(out IGameObject? gameObject) => (gameObject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.IsTargetable == true && x.IsHostile() == true &&
-                                                                     (x.Name.ToString() == PyrosTargetTable[2]))) != null;
+    internal static bool TryGetClosestPyrosTarget(out IGameObject? gameObject)
+    {
+        // Attempting to see if boss is dead
+        gameObject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.IsTargetable && x.IsDead && x.Name.ToString() == PyrosTargetTable[2]);
+
+        // If no valid target is found, check for remaining targets
+        if (gameObject == null)
+        {
+            gameObject = Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(x => x.IsTargetable && x.IsHostile() && !x.IsDead &&
+            (x.Name.ToString() == PyrosTargetTable[0] ||x.Name.ToString() == PyrosTargetTable[1] ||x.Name.ToString() == PyrosTargetTable[2]));
+        }
+
+        return gameObject != null;
+    }
+
     internal static unsafe void InteractWithObject(IGameObject? gameObject)
     {
         try

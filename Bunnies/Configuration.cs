@@ -32,8 +32,8 @@ public class Config : IEzConfig
     public bool logoutAfter { get; set; } = false;
 
     // Time Config
-    public bool runInfinite { get; set; } = false;
-    public int hours { get; set; } = 0;
+    public bool runInfinite { get; set; } = true;
+    public int hours { get; set; } = 1;
     public int minutes { get; set; } = 0;
     public double totalTimeSet { get; set; } = 0;
 

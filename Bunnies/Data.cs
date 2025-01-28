@@ -38,13 +38,23 @@ public static class Data
     public static uint CarrotKeyItem = 2002482;
 
     public static string AltBossMod = "BossModReborn";
-
+    
+    ///*
     public static readonly List<string> PyrosTargetTable = new List<string>
     {
         "Lost Snipper",
         "Lost Big Claw",
         "Karlabos of Pyros"
     };
+    //*/
+    /*
+    public static readonly List<string> PyrosTargetTable = new List<string>
+    {
+        "Pyros Serpent",
+        "Not Real",
+        "Gibbon"
+    };
+    //*/
 
     public static Vector3 PyrosCenterFatePoint = new(124.108f, 707.305f, 256.507f);
     public static Vector3 PyrosRightFatePoint = new(131.498f, 706.524f, 216.308f);

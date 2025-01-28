@@ -48,7 +48,7 @@ internal class DebugWindow : Window
         bool cofferDebug = false;
         if (ImGui.Checkbox("Targeting Debug", ref cofferDebug))
         {
-            P.taskManager.Enqueue(() => PyrosTargetingHandler.PyrosFateTargeting());
+            P.taskManager.Enqueue(() => PyrosTargetingHandler.PyrosFateTargeting(), configuration: DConfig);
         }      
     }
 }
