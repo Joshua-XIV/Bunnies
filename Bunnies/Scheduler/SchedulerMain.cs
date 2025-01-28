@@ -72,7 +72,6 @@ namespace FirstPlugin.Scheduler
                     {
                         if (IsInZone(Pagos) || IsInZone(Pyros) || IsInZone(Hydatos))
                         {
-                            P.taskManager.Enqueue(() => RunCommand("rsr manual"));
                             P.stopwatch.Start();
                             double timeElasped = P.stopwatch.Elapsed.TotalSeconds;
                             uint ZoneID = CurrentZoneID();
@@ -128,7 +127,8 @@ namespace FirstPlugin.Scheduler
                                 if (HasBunnyStatus())
                                 {
                                     TaskMounting.Enqueue();
-                                    RunCommand("e Has Bunny");
+                                    P.taskManager.Enqueue(() => RunCommand("rsr off"));
+                                    TaskPluginLog.Enqueue("Has Bunny");
                                     P.taskManager.Enqueue(() => PyrosMovementHandler.InitialStart());
                                 }
 
@@ -152,6 +152,7 @@ namespace FirstPlugin.Scheduler
 
                                     else if (IsInBunnyFate())
                                     {
+                                        P.taskManager.Enqueue(() => RunCommand("rsr manual"));
                                         P.taskManager.Enqueue(Sync);
                                         TaskDismount.Enqueue();
                                         TaskPluginLog.Enqueue("Inside Bunny Fate");
@@ -163,7 +164,7 @@ namespace FirstPlugin.Scheduler
 
                                     else if (IsAtBunny())
                                     {
-                                        P.taskManager.Enqueue(() => PluginLog.Information("Waiting At Bunnies"));
+                                        P.taskManager.Enqueue(() => RunCommand("rsr off"));
                                         P.taskManager.Enqueue(() => UpdateCurrentTask("Waiting at Fate"));
                                         P.taskManager.EnqueueDelay(100);
                                     }

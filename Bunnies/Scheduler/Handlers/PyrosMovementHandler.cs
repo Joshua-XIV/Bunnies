@@ -74,7 +74,11 @@ namespace FirstPlugin.Scheduler.Handlers
                 else if (CheckDirection.direction == South.CheckPoint1Search["FarSouthEastCP1"])
                     MoveThroughLocations(South.FarSouthEastCP1.FarSouthCP1Coffers, South.FarSouthEastCP1.direction);
                 else if (CheckDirection.direction == South.CheckPoint1Search["FarSouthWestCP1"])
-                   MoveThroughLocations(South.FarSouthWestCP1.FarSouthWestCP1Coffers, South.FarSouthWestCP1.direction);
+                {
+                    MoveThroughLocations(South.FarSouthWestCP1.FarSouthWestCP1Coffers, South.FarSouthWestCP1.direction);
+                    P.taskManager.Enqueue(() => P.taskManager.Enqueue(() => TaskMoveTo.Enqueue(new System.Numerics.Vector3(73.68f, 754.02f, 704.99f), "Offset")));
+                }
+
                 else if (CheckDirection.direction == South.CheckPoint1Search["CloseSouthCP1"])
                     MoveThroughLocations(South.CloseSouthCP1.CloseSouthCP1Coffers, South.CloseSouthCP1.direction);
                 else if (CheckDirection.direction == South.CheckPoint1Search["FarSouthCP1"])
