@@ -19,6 +19,7 @@ using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.Game.Fate;
+using FirstPlugin.IPC;
 namespace FirstPlugin.Ui.DebugWindow;
 
 internal class DebugWindow : Window
@@ -44,11 +45,11 @@ internal class DebugWindow : Window
     public void Dispose() {}
 
     public override void Draw()
-    {
-        bool cofferDebug = false;
-        if (ImGui.Checkbox("Targeting Debug", ref cofferDebug))
+    {//
+        if (ImGui.Button("Targeting Debug"))
         {
-            P.taskManager.Enqueue(() => PyrosTargetingHandler.PyrosFateTargeting(), configuration: DConfig);
+            P.pandora.SetFeatureEnabled("Automatically Open Chests", false);
+            P.pandora.SetFeatureEnabled("Auto-interact with Objects in Instances", false);
         }      
     }
 }

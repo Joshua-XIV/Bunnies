@@ -146,23 +146,22 @@ namespace FirstPlugin.Scheduler.Handlers
                 if (CheckDirection.direction == West.CheckPoint1Search["CloseSouthCP1"])
                 {
                     MoveThroughLocations(West.CloseSouthCP1.CloseSouthCP1Coffers, West.CloseSouthCP1.direction);
-                    return;
                 }
-            });
-            P.taskManager.Enqueue(() => GoToCheckPoint(West.CheckPoint2, West.direction));
-            P.taskManager.Enqueue(() =>
-            {
-                TaskUseCarrot.Enqueue();
-                P.taskManager.Enqueue(() => CheckDirection.CheckDirections(West.CheckPoint2Search));
-                P.taskManager.Enqueue(() =>
+                else
                 {
-                    if (CheckDirection.direction == "")
-                        P.taskManager.Enqueue(() => InitialStart()); // ################ CHANGE LATER
-                    else if (CheckDirection.direction == West.CheckPoint2Search["CloseSouthCP2"])
-                        MoveThroughLocations(West.CloseSouthCP2.CloseSouthCP2Coffers, West.CloseSouthCP2.direction);
-                    else
-                        MoveThroughLocations(West.RemainingCP2.RemainingCP2Coffers, West.RemainingCP2.direction);
-                });
+                    GoToCheckPoint(West.CheckPoint2, West.direction);
+                    TaskUseCarrot.Enqueue();
+                    P.taskManager.Enqueue(() => CheckDirection.CheckDirections(West.CheckPoint2Search));
+                    P.taskManager.Enqueue(() =>
+                    {
+                        if (CheckDirection.direction == "")
+                            P.taskManager.Enqueue(() => InitialStart()); // ################ CHANGE LATER
+                        else if (CheckDirection.direction == West.CheckPoint2Search["CloseSouthCP2"])
+                            MoveThroughLocations(West.CloseSouthCP2.CloseSouthCP2Coffers, West.CloseSouthCP2.direction);
+                        else
+                            MoveThroughLocations(West.RemainingCP2.RemainingCP2Coffers, West.RemainingCP2.direction);
+                    });
+                }
             });
         }
 

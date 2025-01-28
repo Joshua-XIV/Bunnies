@@ -19,6 +19,8 @@ namespace FirstPlugin.Scheduler
 {
     internal static unsafe class SchedulerMain
     {
+        public static bool HadAutoChestOn = false;
+        public static bool HadAutoInteractOn = false;
         public static bool RunTurnin = false; // Used for Turnin Toggle
         public static bool BunniesRun = false; // Used for N-Raid Toggle
         public static bool hasEnqueuedDutyFinder = false; // used for enque throtle flag
@@ -35,7 +37,17 @@ namespace FirstPlugin.Scheduler
         }
 
         internal static bool EnablePlugin()
-        {  
+        {
+            if (P.pandora.GetFeatureEnabled("Automatically Open Chests"))
+            {
+                HadAutoChestOn = true;
+                P.pandora.SetFeatureEnabled("Automatically Open Chests", false);
+            }
+            if (P.pandora.GetFeatureEnabled("Auto-interact with Objects in Instances"))
+            {
+                HadAutoInteractOn = true;
+                P.pandora.SetFeatureEnabled("Auto-interact with Objects in Instances", false);
+            }
             StartBunnies.IsRunning = true;
             BunniesRun = true;
             DoWeTick = true;
@@ -59,6 +71,12 @@ namespace FirstPlugin.Scheduler
                 ToggleRotation(false);
                 InitatedRotation = false;
             }
+            if (HadAutoChestOn)
+                P.pandora.SetFeatureEnabled("Automatically Open Chests", false);
+            if (HadAutoInteractOn)
+                P.pandora.SetFeatureEnabled("Auto-interact with Objects in Instances", false);
+            HadAutoChestOn = false;
+            HadAutoChestOn = false;
             return true;
         }
 
