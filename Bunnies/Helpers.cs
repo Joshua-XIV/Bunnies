@@ -59,11 +59,21 @@ public static unsafe class Helpers
     public static bool IsInZone(uint zoneID) => Svc.ClientState.TerritoryType == zoneID;
     public static void ToggleRotationAI()
     {
+        if (PluginInstalled("RotationSolver"))
+        {
+            RunCommand("rsr manual");
+            RunCommand("rotation settings HostileType 0");
+        }
         RunCommand("bmrai on");
         RunCommand("bmrai followcombat on");
         RunCommand("bmrai followoutofcombat on");
         RunCommand($"bmrai maxdistancetarget {SetAIRange()}");
     }//
+    public static void ToggleRotationAIOff()
+    {
+        RunCommand("bmrai off");
+        RunCommand("rsr off");
+    }
     public static float SetAIRange()
     {
         var x = GetClassJobID();
@@ -387,7 +397,7 @@ public static unsafe class Helpers
         try
         {
             WrathIPC.ReleaseControl((Guid)WrathIPC.CurrentLease!);
-            WrathIPC.RoRLease = null;
+            WrathIPC.BunniesLease = null;
         }
         catch (Exception e)
         {

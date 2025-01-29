@@ -48,6 +48,10 @@ namespace FirstPlugin.Scheduler
                 HadAutoInteractOn = true;
                 P.pandora.SetFeatureEnabled("Auto-interact with Objects in Instances", false);
             }
+            if (PluginInstalled("RotationSolver"))
+            {
+                RunCommand("rsr settings AutoOpenChest false");
+            }
             StartBunnies.IsRunning = true;
             BunniesRun = true;
             DoWeTick = true;
@@ -56,7 +60,7 @@ namespace FirstPlugin.Scheduler
 
         internal static bool DisablePlugin()
         {
-            RunCommand("rsr off");
+            ToggleRotationAIOff();
             StartBunnies.IsRunning = false;
             DoWeTick= false;
             P.taskManager.Abort();
@@ -144,6 +148,7 @@ namespace FirstPlugin.Scheduler
                                 // Do Fate
                                 if (HasBunnyStatus())
                                 {
+                                    ToggleRotationAIOff();
                                     TaskMounting.Enqueue();
                                     P.taskManager.Enqueue(() => RunCommand("rsr off"));
                                     TaskPluginLog.Enqueue("Has Bunny");
@@ -170,7 +175,7 @@ namespace FirstPlugin.Scheduler
 
                                     else if (IsInBunnyFate())
                                     {
-                                        P.taskManager.Enqueue(() => RunCommand("rsr manual"));
+                                        ToggleRotationAI();
                                         P.taskManager.Enqueue(Sync);
                                         TaskDismount.Enqueue();
                                         TaskPluginLog.Enqueue("Inside Bunny Fate");

@@ -15,21 +15,19 @@ internal class WrathIPC
     internal static bool IsEnabled =>
         DalamudReflector.TryGetDalamudPlugin("WrathCombo", out _, false, true);
     public bool Installed => PluginInstalled(Name);
-    internal static Guid? RoRLease;
+    internal static Guid? BunniesLease;
 
     internal static Guid? CurrentLease
     {
         get
         {
-            RoRLease ??= RegisterForLeaseWithCallback(
-                "RootofRiches",
-                "Root of Riches",
-                "RoRIPC"
+            BunniesLease ??= RegisterForLeaseWithCallback(
+                "Bunnies", "Bunnies", "Bunnies"
             );
-            if (RoRLease is null)
+            if (BunniesLease is null)
                 PluginLog.Warning("Failed to register for lease. " +
                                   "See logs from Wrath Como for why.");
-            return RoRLease;
+            return BunniesLease;
         }
     }
 
@@ -71,7 +69,7 @@ internal class WrathIPC
                 break;
         }
 
-        RoRLease = null;
+        BunniesLease = null;
         Svc.Log.Info($"Wrath lease cancelled via {(CancellationReason)reason} for: {s}");
     }
 

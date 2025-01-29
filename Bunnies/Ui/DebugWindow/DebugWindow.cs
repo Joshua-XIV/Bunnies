@@ -48,8 +48,7 @@ internal class DebugWindow : Window
     {//
         if (ImGui.Button("Targeting Debug"))
         {
-            P.pandora.SetFeatureEnabled("Automatically Open Chests", false);
-            P.pandora.SetFeatureEnabled("Auto-interact with Objects in Instances", false);
+            ToggleRotationAI();
         }      
     }
 }

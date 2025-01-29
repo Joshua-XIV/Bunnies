@@ -93,7 +93,7 @@ namespace FirstPlugin.Ui.MainWindow
                 {
                     if (!IsRunning)
                     {
-                        ToggleRotationAI();
+                        ToggleRotationAIOff();
                         SchedulerMain.EnablePlugin();
                     }
                     else
