@@ -102,7 +102,8 @@ internal class MainWindow : Window
             { "Gold Coffers", stat.goldCoffer },
             { "Silver Coffers", stat.silverCoffer },
             { "Bronze Coffers", stat.bronzeCoffer },
-            { "Eldthurs Mount", stat.eldthursCounter }
+            { "Eldthurs Mount", stat.eldthursCounter },
+            { "Pyros Hairstyles", stat.pyrosHairStyleCounter}
         };
 
         foreach (var (label, value) in stats)
