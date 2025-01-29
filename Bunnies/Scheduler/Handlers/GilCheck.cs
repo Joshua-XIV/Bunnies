@@ -16,10 +16,12 @@ namespace FirstPlugin.Scheduler.Handlers
         static TaskManager TaskManager => taskManager;
         private static int PreviousGil = (int)GetGil();
         private static int PreviousEldthurs = GetItemCount(24219);
+        private static int PreviousPryosHairStyle = GetItemCount(24233);
         internal static void CheckEverything()
         {
             int currentGil = (int)GetGil();
             int currentEldthurs = GetItemCount(24219);
+            int currentPyroHairStyle = GetItemCount(24233);
 
             if (currentGil > PreviousGil)
             {
@@ -44,8 +46,15 @@ namespace FirstPlugin.Scheduler.Handlers
                 int earnedEldthurs = currentEldthurs - PreviousEldthurs;
                 C.UpdateStats(Stats => { Stats.eldthursCounter++; });
             }
+
+            if (currentPyroHairStyle > PreviousPryosHairStyle)
+            {
+                int earnedPyrosHairStyle = currentPyroHairStyle - PreviousPryosHairStyle;
+                C.UpdateStats(Stats => { Stats.pyrosHairStyleCounter++; });
+            }
             PreviousGil = currentGil;
             PreviousEldthurs = currentEldthurs;
+            PreviousPryosHairStyle = currentPyroHairStyle;
         }
     }
 }

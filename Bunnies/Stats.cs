@@ -8,6 +8,7 @@ namespace FirstPlugin
         public int silverCoffer = 0;
         public int bronzeCoffer = 0;
         public int eldthursCounter = 0;
+        public int pyrosHairStyleCounter = 0;
 
         public void Reset()
         {
@@ -17,6 +18,7 @@ namespace FirstPlugin
             silverCoffer = 0;
             bronzeCoffer = 0;
             eldthursCounter = 0;
-        }
+            pyrosHairStyleCounter = 0;
+    }
     }
 }
