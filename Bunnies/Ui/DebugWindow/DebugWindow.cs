@@ -56,6 +56,6 @@ internal class DebugWindow : Window
             C.UpdatePyrosStats(PyrosStats => { PyrosStats.eldthursCounter = C.stats.eldthursCounter; });
             C.UpdatePyrosStats(PyrosStats => { PyrosStats.pyrosHairStyleCounter = C.stats.pyrosHairStyleCounter; });
             C.enableDebug = debug;
-        }      
+        }
     }
 }
