@@ -1,9 +1,6 @@
 name: TriggerUpdateMetadata
 
 on:
-    push:
-        path:
-            - meta/**
     workflow_dispatch:
 
 jobs:
