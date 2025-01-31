@@ -7,4 +7,3 @@ jobs:
     TriggerUpdateMeta:
         uses:
             Joshua-XIV/MyDalamudPlugin/.github/workflows/Update_Metadata.yml@main
-        secrets: inheirt
