@@ -134,5 +134,15 @@ namespace FirstPlugin.Scheduler.Handlers
             PreviousPryosHairStyle = currentPyroHairStyle;
             C.Save();
         }
+
+        internal static void SetEveything()
+        {
+            int currentGil = (int)GetGil();
+            int currentEldthurs = GetItemCount(24219);
+            int currentPyroHairStyle = GetItemCount(24233);
+            PreviousGil = currentGil;
+            PreviousEldthurs = currentEldthurs;
+            PreviousPryosHairStyle = currentPyroHairStyle;
+        }
     }
 }

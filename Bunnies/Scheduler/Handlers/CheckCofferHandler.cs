@@ -25,7 +25,7 @@ namespace FirstPlugin.Scheduler.Handlers
                 CofferState.FoundCoffer = true;
                 P.taskManager.Enqueue(() => UpdateCurrentTask("Grabbing Coffer"));
                 P.taskManager.Enqueue(() => CofferState.FoundCoffer = true);
-                P.taskManager.Enqueue(() => GilCheck.CheckEverything());
+                P.taskManager.Enqueue(() => GilCheck.SetEveything());
                 P.taskManager.Enqueue(() => RunCommand("e Targeting Coffer"));
                 TaskTargetNameDistance.Enqueue(gameObject.Name.ToString(), 5);
                 TaskInteractName.Enqueue(gameObject.Name.ToString());
