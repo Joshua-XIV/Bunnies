@@ -1,4 +1,5 @@
 using ECommons.Configuration;
+using Newtonsoft.Json.Bson;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -52,14 +53,41 @@ public class Config : IEzConfig
 
     // Stats
     public Stats stats { get; set; } = new Stats();
+    public PagosStats pagosStats { get; set; } = new PagosStats();
+    public PagosStats pagosSessionStats { get; set; } = new PagosStats();
+    public PyrosStats pyrosStats { get; set; } = new PyrosStats();
+    public PyrosStats pyrosSessionStats { get; set; } = new PyrosStats();
+    public HydatosStats hydatosStats { get; set; } = new HydatosStats();
+    public HydatosStats hydatosSessionStats { get; set; } = new HydatosStats();
     public Stats sessionStats { get; set; } = new Stats();
     public bool hasUpdatedStats = false;
+
+    // Update Stats
     public void UpdateStats(Action<Stats> updateAction)
     {
         updateAction(stats);
         updateAction(sessionStats);
     }
 
+    public void UpdatePagosStats(Action<PagosStats> updatePagosAction)
+    {
+        updatePagosAction(pagosStats);
+        updatePagosAction(pagosSessionStats);
+    }
+
+    public void UpdatePyrosStats(Action<PyrosStats> updatePyrosAction)
+    {
+        updatePyrosAction(pyrosStats);
+        updatePyrosAction(pyrosSessionStats);
+    }
+
+    public void UpdateHydatosStats(Action<HydatosStats> updateHydatosAction)
+    {
+        updateHydatosAction(hydatosStats);
+        updateHydatosAction(hydatosSessionStats);
+    }
+    // Debug bool
+    public bool enableDebug { get; set; } = false;
     // Save
     public void Save()
     {

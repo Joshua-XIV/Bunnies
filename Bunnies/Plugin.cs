@@ -124,6 +124,9 @@ public class Plugin : IDalamudPlugin
 
         Svc.Framework.Update += Tick;
         C.sessionStats.Reset();
+        C.pagosSessionStats.Reset();
+        C.pyrosSessionStats.Reset();
+        C.hydatosSessionStats.Reset();
     }
             
     private void Tick(object _)

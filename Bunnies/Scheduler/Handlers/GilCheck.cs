@@ -13,7 +13,6 @@ namespace FirstPlugin.Scheduler.Handlers
     internal static unsafe class GilCheck
     {
         internal static TaskManager taskManager = new();
-        static TaskManager TaskManager => taskManager;
         private static int PreviousGil = (int)GetGil();
         private static int PreviousEldthurs = GetItemCount(24219);
         private static int PreviousPryosHairStyle = GetItemCount(24233);
@@ -29,32 +28,111 @@ namespace FirstPlugin.Scheduler.Handlers
                 C.UpdateStats(Stats =>
                 {
                     if (earnedGil == 100_000)
+                    {
                         Stats.goldCoffer++;
+                    }
                     else if (earnedGil == 25_000)
+                    {
                         Stats.silverCoffer++;
+                    }
                     else if (earnedGil == 10_000)
+                    {
                         Stats.bronzeCoffer++;
+                    }
 
                     if (earnedGil == 100_000 || earnedGil == 25_000 || earnedGil == 10_000)
+                    {
                         Stats.gilEarned += earnedGil;
+                    }
                 });
-                C.Save();
+                if (CurrentZoneID() == Pagos)
+                {
+                    C.UpdatePagosStats(Stats =>
+                    {
+                        if (earnedGil == 100_000)
+                        {
+                            Stats.goldCoffer++;
+                        }
+                        else if (earnedGil == 25_000)
+                        {
+                            Stats.silverCoffer++;
+                        }
+                        else if (earnedGil == 10_000)
+                        {
+                            Stats.bronzeCoffer++;
+                        }
+
+                        if (earnedGil == 100_000 || earnedGil == 25_000 || earnedGil == 10_000)
+                        {
+                            Stats.gilEarned += earnedGil;
+                        }
+                    });
+                }
+                else if (CurrentZoneID() == Pyros)
+                {
+                    C.UpdatePyrosStats(Stats =>
+                    {
+                        if (earnedGil == 100_000)
+                        {
+                            Stats.goldCoffer++;
+                        }
+                        else if (earnedGil == 25_000)
+                        {
+                            Stats.silverCoffer++;
+                        }
+                        else if (earnedGil == 10_000)
+                        {
+                            Stats.bronzeCoffer++;
+                        }
+
+                        if (earnedGil == 100_000 || earnedGil == 25_000 || earnedGil == 10_000)
+                        {
+                            Stats.gilEarned += earnedGil;
+                        }
+                    });
+                }
+                else if (CurrentZoneID() == Hydatos)
+                {
+                    C.UpdateHydatosStats(Stats =>
+                    {
+                        if (earnedGil == 100_000)
+                        {
+                            Stats.goldCoffer++;
+                        }
+                        else if (earnedGil == 25_000)
+                        {
+                            Stats.silverCoffer++;
+                        }
+                        else if (earnedGil == 10_000)
+                        {
+                            Stats.bronzeCoffer++;
+                        }
+
+                        if (earnedGil == 100_000 || earnedGil == 25_000 || earnedGil == 10_000)
+                        {
+                            Stats.gilEarned += earnedGil;
+                        }
+                    });
+                }
             }
 
             if (currentEldthurs > PreviousEldthurs)
             {
                 int earnedEldthurs = currentEldthurs - PreviousEldthurs;
                 C.UpdateStats(Stats => { Stats.eldthursCounter++; });
+                C.UpdatePyrosStats(PyrosStats => { PyrosStats.eldthursCounter++; });
             }
 
             if (currentPyroHairStyle > PreviousPryosHairStyle)
             {
                 int earnedPyrosHairStyle = currentPyroHairStyle - PreviousPryosHairStyle;
                 C.UpdateStats(Stats => { Stats.pyrosHairStyleCounter++; });
+                C.UpdatePyrosStats(PyrosStats => { PyrosStats.pyrosHairStyleCounter++; });
             }
             PreviousGil = currentGil;
             PreviousEldthurs = currentEldthurs;
             PreviousPryosHairStyle = currentPyroHairStyle;
+            C.Save();
         }
     }
 }

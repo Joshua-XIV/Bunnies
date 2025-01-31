@@ -13,6 +13,7 @@ using FirstPlugin.IPC.Lifestream;
 using FirstPlugin.Scheduler.Handlers;
 using FirstPlugin.Scheduler.Tasks;
 using FirstPlugin.Ui.MainWindow;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace FirstPlugin.Scheduler
@@ -114,7 +115,7 @@ namespace FirstPlugin.Scheduler
                                         TaskGoToHome.Enqueue();
                                     }
                                     else
-                                        P.taskManager.Enqueue(() => PluginLog.LogInformation("Teleport to Housing Broke"));
+                                        P.taskManager.Enqueue(() => PluginLog.LogInformation("Either House doesn't exist or the task failed."));
 
                                 if (C.logoutAfter)
                                 {
@@ -149,6 +150,11 @@ namespace FirstPlugin.Scheduler
                                 if (HasBunnyStatus())
                                 {
                                     ToggleRotationAIOff();
+                                    if (!IsPlayerAtBossLocation(Svc.ClientState.LocalPlayer!.Position))
+                                    {
+                                        TaskPluginLog.Enqueue("Going to Boss Location");
+                                        TaskMoveTo.Enqueue(new Vector3(161.120f, 710.682f, 259.266f), "Boss");
+                                    }
                                     TaskMounting.Enqueue();
                                     P.taskManager.Enqueue(() => RunCommand("rsr off"));
                                     TaskPluginLog.Enqueue("Has Bunny");
@@ -157,16 +163,18 @@ namespace FirstPlugin.Scheduler
 
                                 else if (!HasBunnyStatus())
                                 {
-                                    if (C.enableRepair && NeedsRepair(C.repairSlider))
+                                    if (C.enableRepair && NeedsRepair(C.repairSlider) && !IsInBunnyFate())
                                     {
                                         P.taskManager.Enqueue(() => PluginLog.Information("Need Repair"));
                                         if (C.selfRepair)
                                         {
+                                            P.taskManager.Enqueue(() => UpdateCurrentTask("Self Repairing"));
                                             TaskDismount.Enqueue();
                                             TaskSelfRepair.Enqueue();
                                         }
                                         else
                                         {
+                                            P.taskManager.Enqueue(() => UpdateCurrentTask("Going to Repair Mender"));
                                             TaskMounting.Enqueue();
                                             TaskMoveTo.Enqueue(PyrosRepairNpc, "Pyros Mender", 0.5f);
                                             TaskRepairNpc.Enqueue("Expedition Mender");
@@ -179,6 +187,7 @@ namespace FirstPlugin.Scheduler
                                         P.taskManager.Enqueue(Sync);
                                         TaskDismount.Enqueue();
                                         TaskPluginLog.Enqueue("Inside Bunny Fate");
+                                        P.taskManager.Enqueue(() => UpdateCurrentTask("In Bunny Fate"));
                                         PyrosTargetingHandler.Enqueue();
                                         TaskMounting.Enqueue();
                                         P.taskManager.Enqueue(() => HasBunnyStatus());

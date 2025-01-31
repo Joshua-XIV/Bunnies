@@ -13,6 +13,7 @@ namespace FirstPlugin.Scheduler.Tasks
             P.taskManager.Enqueue(PlayerNotBusy);
             var closest = AethernetData.Distances.OrderBy(x => x.distance).First();
             TaskMoveTo.Enqueue(closest.position, closest.description, closest.tolerance);
+            P.taskManager.Enqueue(() => UpdateCurrentTask("Using Aethernet"));
             P.taskManager.Enqueue(() => P.lifestream.AethernetTeleport(name));
             P.taskManager.Enqueue(() => P.lifestream.IsBusy());
             /*

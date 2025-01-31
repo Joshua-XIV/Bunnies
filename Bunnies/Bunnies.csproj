@@ -13,6 +13,18 @@
     <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <Optimize>False</Optimize>
+    </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\AutoRetainerAPI\AutoRetainerAPI\AutoRetainerAPI.csproj" />
         <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
@@ -29,5 +41,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; powershell -ExecutionPolicy Bypass -Command &quot;&amp; {Compress-Archive -Path '$(TargetDir)*.dll', '$(TargetDir)*.pdb', '$(TargetDir)*.config' -DestinationPath '$(TargetDir)latest.zip' -Force}&quot;" />
+    </Target>
     
 </Project>

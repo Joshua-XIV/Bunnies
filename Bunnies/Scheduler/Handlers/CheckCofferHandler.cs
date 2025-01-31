@@ -34,6 +34,10 @@ namespace FirstPlugin.Scheduler.Handlers
                 P.taskManager.Enqueue(() => PlayerNotBusy());
                 P.taskManager.Enqueue(() => GilCheck.CheckEverything());
             }
+            else
+            {
+                TaskPluginLog.Enqueue("Coffer Not Found");
+            }
             /*
             P.taskManager.Enqueue(() =>
             {

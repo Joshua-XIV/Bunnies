@@ -45,10 +45,17 @@ internal class DebugWindow : Window
     public void Dispose() {}
 
     public override void Draw()
-    {//
-        if (ImGui.Button("Targeting Debug"))
+    {
+        bool debug = C.enableDebug;
+        if (ImGui.Checkbox("Debug Stats", ref debug))
         {
-            ToggleRotationAI();
+            C.UpdatePyrosStats(PyrosStats => { PyrosStats.gilEarned = C.stats.gilEarned; });
+            C.UpdatePyrosStats(PyrosStats => { PyrosStats.goldCoffer = C.stats.goldCoffer; });
+            C.UpdatePyrosStats(PyrosStats => { PyrosStats.silverCoffer = C.stats.silverCoffer; });
+            C.UpdatePyrosStats(PyrosStats => { PyrosStats.bronzeCoffer = C.stats.bronzeCoffer; });
+            C.UpdatePyrosStats(PyrosStats => { PyrosStats.eldthursCounter = C.stats.eldthursCounter; });
+            C.UpdatePyrosStats(PyrosStats => { PyrosStats.pyrosHairStyleCounter = C.stats.pyrosHairStyleCounter; });
+            C.enableDebug = debug;
         }      
     }
 }

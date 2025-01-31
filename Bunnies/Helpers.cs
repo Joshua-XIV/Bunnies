@@ -57,6 +57,29 @@ public static unsafe class Helpers
     public static uint GetClassJobID() => Svc.ClientState.LocalPlayer!.ClassJob.RowId;
     public static uint CurrentZoneID() => Svc.ClientState.TerritoryType;
     public static bool IsInZone(uint zoneID) => Svc.ClientState.TerritoryType == zoneID;
+    /*
+              if (ImGui.Selectable("##" + texts[0], showPagosStats, ImGuiSelectableFlags.None, availableWidth))
+        {
+            showPagosStats = !showPagosStats;
+        }
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(textStartX[0]);
+        ImGui.Text(texts[0]);
+        ImGui.Spacing();
+
+        if (showPagosStats)
+            DrawPagosStats(pagosStat);
+     */
+    public static void DrawMainSelectables(string label, ref bool show, Vector2 vector, float textstart)
+    {
+        ImGui.SetCursorPosX(0);
+        if (ImGui.Selectable("##" + label, show, ImGuiSelectableFlags.None, vector))
+            show = !show;
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(textstart);
+        ImGui.Text(label);
+        ImGui.Spacing();
+    }
     public static void ToggleRotationAI()
     {
         if (PluginInstalled("RotationSolver"))
@@ -179,7 +202,7 @@ public static unsafe class Helpers
             return false;
     }
 
-    #region ACTIONS AND COOLDOWNS
+#region ACTIONS AND COOLDOWNS
     public static unsafe void ExecuteActionGeneral(uint actionID) => ActionManager.Instance()->UseAction(ActionType.GeneralAction, actionID);
     public static unsafe void ExecuteAction(uint actionID) => ActionManager.Instance()->UseAction(ActionType.Action, actionID);
     public static unsafe void ExecuteKeyAction(uint actionID) => ActionManager.Instance()->UseAction(ActionType.KeyItem, actionID);
@@ -192,7 +215,7 @@ public static unsafe class Helpers
     public static unsafe float GetRecastElasped(uint actionID) => ActionManager.Instance()->GetRecastTimeElapsed(ActionType.Action, actionID);
     public static unsafe float GetRecastElaspedKey(uint actionID) => ActionManager.Instance()->GetRecastTimeElapsed(ActionType.KeyItem, actionID);
 
-    #endregion ACTIONS AND COOLDOWNS
+#endregion ACTIONS AND COOLDOWNS
     private static readonly AbandonDuty ExitDuty = Marshal.GetDelegateForFunctionPointer<AbandonDuty>(Svc.SigScanner.ScanText("E8 ?? ?? ?? ?? 48 8B 43 28 41 B2 01"));
 
     private delegate void AbandonDuty(bool a1);
@@ -639,6 +662,16 @@ public static unsafe class Helpers
         // Calculate the random point
         return (1 - r1 - r2) * p1 + r1 * p2 + r2 * p3;
     }
+
+    public static bool IsPlayerAtBossLocation(Vector3 playerLocation)
+    {
+        Vector3 bossPosition = new Vector3(161.120f, 710.682f, 259.266f);
+        if (GetDistanceToPoint(bossPosition[0], bossPosition[1], bossPosition[2]) < 13)
+            return true;
+        else
+            return false;
+    }
+
 
 #endregion PlayerPositioning
 

@@ -26,6 +26,7 @@ namespace FirstPlugin.Scheduler.Handlers
             TaskUseCarrot.Enqueue();
             P.taskManager.EnqueueDelay(2000);
             P.taskManager.Enqueue(() => RunCommand("e Looking for Coffer"));
+            TaskPluginLog.Enqueue("Looking for Coffer");
             P.taskManager.Enqueue(() => CheckCofferHandler.CheckCoffer());
         }
         //

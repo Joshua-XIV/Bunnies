@@ -10,6 +10,7 @@ namespace FirstPlugin.Scheduler.Tasks
         internal static void Enqueue()
         {
             IGameObject? gameObject = null;
+            P.taskManager.Enqueue(() => UpdateCurrentTask("Using Retainer"));
             P.taskManager.Enqueue(() =>TryGetObjectByName("Summoning Bell", out gameObject));
             TaskPluginLog.Enqueue("Using Auto Retainer Task");
             P.taskManager.Enqueue(PlayerNotBusy);

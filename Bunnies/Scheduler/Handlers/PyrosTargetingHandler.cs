@@ -23,32 +23,37 @@ namespace FirstPlugin.Scheduler.Handlers
         internal static bool PyrosFateTargeting()
         {
             IGameObject gameObject;
-            TryGetClosestPyrosTarget(out gameObject);
-            Svc.Targets.SetTarget(gameObject);
+            if (TryGetClosestPyrosTarget(out gameObject))
+                Svc.Targets.SetTarget(gameObject);
+
             if (Svc.ClientState.LocalPlayer!.IsDead)
                 return true;
 
             if (!IsInFate())
                 return true;
-            
-            if (gameObject.Name.ToString() == PyrosTargetTable[2] && gameObject.IsDead)
-            {
-                return true;
-            }
 
-            else if (DistanceToHitboxEdge(gameObject.HitboxRadius, gameObject) > SetAIRange() && !gameObject.IsDead)
+            if (gameObject != null)
             {
-                if (!P.navmesh.PathfindInProgress() && !IsMoving() && !gameObject.IsDead && DistanceToHitboxEdge(gameObject.HitboxRadius, gameObject) > SetAIRange())
-                    P.navmesh.PathfindAndMoveTo(gameObject.Position, false);
-                return false;
-            }
+                if (gameObject.Name.ToString() == PyrosTargetTable[2] && gameObject.IsDead)
+                {
+                    return true;
+                }
 
+                else if (DistanceToHitboxEdge(gameObject.HitboxRadius, gameObject) > SetAIRange() && !gameObject.IsDead)
+                {
+                    if (!P.navmesh.PathfindInProgress() && !IsMoving() && !gameObject.IsDead && DistanceToHitboxEdge(gameObject.HitboxRadius, gameObject) > SetAIRange())
+                        P.navmesh.PathfindAndMoveTo(gameObject.Position, false);
+                    return false;
+                }
+
+                else
+                {
+                    P.navmesh.Stop();
+                    return false;
+                }
+            }
             else
-            {
-                P.navmesh.Stop();
-            }
-
-            return false;
+                return false;
         }
     }
 }
