@@ -9,7 +9,7 @@ Repo
 https://github.com/Joshua-XIV/MyDalamudPlugin/raw/main/repo.json
 ```
 
-##NOTE: This plugin currently only supports the Pyros zone of Eureka.
+## NOTE: This plugin currently only supports the Pyros zone of Eureka.
 
 <div align="left">
 
@@ -20,7 +20,7 @@ Bunnies is a Dalamud plugin for FFXIV which provides QoL and automation for comp
 First, you must use the [FFXIVQuickLauncher](https://github.com/goatcorp/FFXIVQuickLauncher) to run your game. The Quick Launcher allows for custom plugins to be installed to add new functionality to the game. To install, you first need to have the Quick Launcher setup for your game, instructions can be found on the [FFXIVQuickLauncher](https://github.com/goatcorp/FFXIVQuickLauncher) page.
 
 ## How do I install this plugin?
-**[Please visit this page on how to install the Bunnies plugins via Dalamud repository support.](https://github.com/Joshua-XIV/MyDalamudPlugin)
+[Please visit this page on how to install the Bunnies plugins via Dalamud repository support.](https://github.com/Joshua-XIV/MyDalamudPlugin)
 
 ## How to use this plugin?
 In the in-game chat, type and enter `/bunnies`, this will bring up the main window for the plugin.
