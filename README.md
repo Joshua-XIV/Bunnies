@@ -1,7 +1,6 @@
 <div align="center">
 
 # Bunnies - Final Fantasy XIV Eureka Bunny Plugin
-![Bunnies Icon](https://raw.githubusercontent.com/Joshua-XIV/Bunnies/master/Bunnies/Resources/Images/bunnyMudra.png)
 
 Repo
 ```
