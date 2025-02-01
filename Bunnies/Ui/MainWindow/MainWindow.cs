@@ -67,9 +67,13 @@ internal class MainWindow : Window
         }
     }
     private bool showAllStats = true;
+    private bool showSessionStats = true;
     private bool showPagosStats = false;
+    private bool showSessionPagosStats = false;
     private bool showPyrosStats = false;
+    private bool showSessionPyrosStats = false;
     private bool showHydatosStats = false;
+    private bool showSessionHydatostats = false;
     private void DrawStatsTab(Stats stat, out bool reset, PyrosStats pyrosStat, PagosStats pagosStat, HydatosStats hydatosStat)
     {
         float windowHeight = ImGui.GetWindowHeight();
