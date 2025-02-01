@@ -8,7 +8,7 @@ Repo
 https://github.com/Joshua-XIV/MyDalamudPlugin/raw/main/repo.json
 ```
 
-NOTE: This plugin currently only supports the Pyros zone of Eureka.
+##NOTE: This plugin currently only supports the Pyros zone of Eureka.
 
 <div align="left">
 
