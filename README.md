@@ -35,6 +35,7 @@ There is also a "Stats" page that will keep track the total amount between all z
 ![Bunnies Stats Window](https://raw.githubusercontent.com/Joshua-XIV/Bunnies/master/Bunnies/Resources/Images/BunniesStatsWindow.png)
 
 To view and edit the settings to your liking,  type and enter `/bunnies settings`, or click the cog wheel on the top right of main window. This will bring up the settings window for the plugin, to which you edit the config to your liking and which also provides support for AutoRetainer if choose to do so.
+
 Autoretainer repo: https://love.puni.sh/ment.json
 
 ## Required Plugins
