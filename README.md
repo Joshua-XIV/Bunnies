@@ -2,6 +2,8 @@
 
 # Bunnies - Final Fantasy XIV Eureka Bunny Plugin
 
+<img src="https://raw.githubusercontent.com/Joshua-XIV/Bunnies/master/Bunnies/Resources/Images/bunnyMudra.png" alt="Bunnies Icon Text" width="100" height="100">
+
 Repo
 ```
 https://github.com/Joshua-XIV/MyDalamudPlugin/raw/main/repo.json
