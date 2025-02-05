@@ -102,63 +102,11 @@ public static class Data
             { "FarNorthWest", "You sense something far to the northwest." },
             { "FarFarNorthWest", "You sense something far, far to the northwest." }
         };
-        #region IGNORE
-        /*
-        public static readonly Dictionary<string, string> NorthOptions = new Dictionary<string, string>
-        {
-            { "CloseNorth", "You sense something to the north." },
-            { "FarNorth", "You sense something far to the north." },
-            { "FarFarNorth", "You sense something far, far to the north." }
-        };
-        public static readonly Dictionary<string, string> NorthEastOptions = new Dictionary<string, string>
-        {
-            { "CloseNorthEast", "You sense something to the northeast." },
-            { "FarNorthEast", "You sense something far to the northeast." },
-            { "FarFarNorthEast", "You sense something far, far to the northeast." }
-        };
-        public static readonly Dictionary<string, string> EastOptions = new Dictionary<string, string>
-        {
-            { "CloseEast", "You sense something to the east." },
-            { "FarEast", "You sense something far to the east." },
-            { "FarFarEast", "You sense something far, far to the east." }
-        };
-        public static readonly Dictionary<string, string> SouthEastOptions = new Dictionary<string, string>
-        {
-            { "CloseSouthEast", "You sense something to the southeast." },
-            { "FarSouthEast", "You sense something far to the southeast." },
-            { "FarFarSouthEast", "You sense something far, far to the southeast." }
-        };
-        public static readonly Dictionary<string, string> SouthOptions = new Dictionary<string, string>
-        {
-            { "CloseSouth", "You sense something to the south." },
-            { "FarSouth", "You sense something far to the south." },
-            { "FarFarSouth", "You sense something far, far to the south." }
-        };
-        public static readonly Dictionary<string, string> SouthWestOptions = new Dictionary<string, string>
-        {
-            { "CloseSouthWest", "You sense something to the southwest." },
-            { "FarSouthWest", "You sense something far to the southwest." },
-            { "FarFarSouthWest", "You sense something far, far to the southwest." }
-        };
-        public static readonly Dictionary<string, string> WestOptions = new Dictionary<string, string>
-        {
-            { "CloseWest", "You sense something to the west." },
-            { "FarWest", "You sense something far to the west." },
-            { "FarFarWest", "You sense something far, far to the west." }
-        };
-        public static readonly Dictionary<string, string> NorthWestOptions = new Dictionary<string, string>
-        {
-            { "CloseNorthWest", "You sense something to the northwest." },
-            { "FarNorthWest", "You sense something far to the northwest." },
-            { "FarFarNorthWest", "You sense something far, far to the northwest." }
-        }; 
-        */
-        #endregion IGNORE
     }
 
-    #endregion DIRECTION
+#endregion DIRECTION
 
-    #region PYROSSEARCH
+#region PYROSSEARCH
 
     public class InitialSearch
     {

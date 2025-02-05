@@ -12,14 +12,10 @@ namespace FirstPlugin
         internal Filter()
         {
             P.ToastGui.Toast += this.OnToast;
-            //P.ToastGui.QuestToast += this.OnQuestToast;
-            //P.ToastGui.ErrorToast += this.OnErrorToast;
         }
 
         public void Dispose()
         {
-            //P.ToastGui.ErrorToast -= this.OnErrorToast;
-            //P.ToastGui.QuestToast -= this.OnQuestToast;
             P.ToastGui.Toast -= this.OnToast;
         }
 
@@ -32,17 +28,6 @@ namespace FirstPlugin
         {
             this.DoFilter(message, ref isHandled);
         }
-        /*
-        private void OnErrorToast(ref SeString message, ref bool isHandled)
-        {
-            this.DoFilter(message, ref isHandled);
-        }
-
-        private void OnQuestToast(ref SeString message, ref QuestToastOptions options, ref bool isHandled)
-        {
-            this.DoFilter(message, ref isHandled);
-        }
-        */
         private void DoFilter(SeString message, ref bool isHandled)
         {
             _lastToast = message.TextValue;

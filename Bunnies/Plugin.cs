@@ -1,4 +1,3 @@
-using Dalamud.Game.Gui.Toast;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -14,11 +13,7 @@ using AutoRetainerAPI;
 using System.Diagnostics;
 using FirstPlugin.IPC.Lifestream;
 using FirstPlugin.Scheduler;
-using Dalamud.IoC;
-using System.IO;
-using Dalamud.Interface.Textures.TextureWraps;
-using Dalamud.Interface.Internal;
-using ECommons.ImGuiMethods;
+
 
 namespace FirstPlugin;
 
@@ -40,7 +35,7 @@ public class Plugin : IDalamudPlugin
     internal SettingsWindow settingsWindow;
     internal DebugWindow debugWindow;
     internal string clipboardPath;
-    // toast?
+
     public Filter filter { get; }
     // IPC's/Internals
     internal AutoRetainerApi autoRetainerApi;
@@ -67,13 +62,11 @@ public class Plugin : IDalamudPlugin
         ECommonsMain.Init(pluginInterface, P, ECommons.Module.DalamudReflector, ECommons.Module.ObjectFunctions);
         new ECommons.Schedulers.TickScheduler(Load);
     }
-    //
+
     public void Load()
     {
         EzConfig.Migrate<Config>();
         config = EzConfig.Init<Config>();
-
-        // Toast
 
         // IPC's
         taskManager = new();

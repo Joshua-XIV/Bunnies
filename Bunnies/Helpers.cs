@@ -1,11 +1,7 @@
-using Dalamud.Game.Text.SeStringHandling;
-using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
-using Dalamud.Plugin.Services;
 using ECommons.Automation.NeoTaskManager;
 using ECommons.DalamudServices;
 using ECommons.DalamudServices.Legacy;
@@ -25,107 +21,103 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using FirstPlugin.IPC;
 using Lumina.Excel.Sheets;
-using Dalamud.Game.ClientState.Statuses;
-using System.Linq;
-using System.ComponentModel;
-using FirstPlugin.Scheduler.Tasks;
-using ECommons;
-using Dalamud;
-using Dalamud.Game.Gui.Toast;
-using Dalamud.IoC;
 using FFXIVClientStructs.FFXIV.Client.Game.Fate;
-using ECommons.MathHelpers;
-using System;
-using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 
 namespace FirstPlugin;
 
 public static unsafe class Helpers
 {
-    public static bool HasStatus(uint status) => Svc.ClientState.LocalPlayer!.BattleChara()->GetStatusManager()->HasStatus(status);
-    public static bool HasBunnyStatus() => HasStatus(BunnyStatusID);
-    public static uint GetCurrentWorld() => Svc.ClientState.LocalPlayer?.CurrentWorld.RowId ?? 0;
-    public static uint GetHomeWorld() => Svc.ClientState.LocalPlayer?.HomeWorld.RowId ?? 0;
-    public static bool IsBetweenAreas => (Svc.Condition[ConditionFlag.BetweenAreas] || Svc.Condition[ConditionFlag.BetweenAreas51]);
+    // Runs a slash command in-game
+    public static void RunCommand(string command)
+    {
+        ECommons.Automation.Chat.Instance.ExecuteCommand($"/{command}");
+    }
+
+    // Returns the current amount of gil the player has
     public static unsafe uint GetGil() => InventoryManager.Instance()->GetGil();
+
+    // Returns closest object to player by name
     internal static IGameObject? GetObjectByName(string name) => Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(o => o.Name.TextValue.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+
+    // Returns the player's current grand company
     public static byte GetPlayerGC() => UIState.Instance()->PlayerState.GrandCompany;
+
+    // Instance of the player
     public static GameObject* LPlayer() => GameObjectManager.Instance()->Objects.IndexSorted[0].Value;
+
+    // Gets the current class ID of the player
     public static uint GetClassJobID() => Svc.ClientState.LocalPlayer!.ClassJob.RowId;
+
+    // Config for the timeout limit of task enqueueing
+    public static TaskManagerConfiguration DConfig => new(timeLimitMS: 10 * 60 * 1000, abortOnTimeout: false);
+
+    // Instance of random
+    internal static Random random = new Random();
+
+#region ZONES_WORLD
+    // Returns the current world the player is in
+    public static uint GetCurrentWorld() => Svc.ClientState.LocalPlayer?.CurrentWorld.RowId ?? 0;
+
+    // Returns the player's home world
+    public static uint GetHomeWorld() => Svc.ClientState.LocalPlayer?.HomeWorld.RowId ?? 0;
+
+    // Returns the ID of the zone the player is current in
     public static uint CurrentZoneID() => Svc.ClientState.TerritoryType;
+
+    // Returns if the Zone ID matches the given ID in the paramter
     public static bool IsInZone(uint zoneID) => Svc.ClientState.TerritoryType == zoneID;
-    /*
-              if (ImGui.Selectable("##" + texts[0], showPagosStats, ImGuiSelectableFlags.None, availableWidth))
-        {
-            showPagosStats = !showPagosStats;
-        }
-        ImGui.SameLine();
-        ImGui.SetCursorPosX(textStartX[0]);
-        ImGui.Text(texts[0]);
-        ImGui.Spacing();
+#endregion
 
-        if (showPagosStats)
-            DrawPagosStats(pagosStat);
-     */
-    public static void DrawMainSelectables(string label, ref bool show, Vector2 vector, float textstart)
-    {
-        ImGui.SetCursorPosX(0);
-        if (ImGui.Selectable("##" + label, show, ImGuiSelectableFlags.None, vector))
-            show = !show;
-        ImGui.SameLine();
-        ImGui.SetCursorPosX(textstart);
-        ImGui.Text(label);
-        ImGui.Spacing();
-    }
-    public static void ToggleRotationAI()
-    {
-        if (PluginInstalled("RotationSolver"))
-        {
-            RunCommand("rsr manual");
-            RunCommand("rotation settings HostileType 0");
-        }
-        RunCommand("bmrai on");
-        RunCommand("bmrai followcombat on");
-        RunCommand("bmrai followoutofcombat on");
-        RunCommand($"bmrai maxdistancetarget {SetAIRange()}");
-    }//
-    public static void ToggleRotationAIOff()
-    {
-        RunCommand("bmrai off");
-        RunCommand("rsr off");
-    }
-    public static float SetAIRange()
-    {
-        var x = GetClassJobID();
-        float range = 2.5f;
-        switch(x)
-        {
-            case 7 or 25 or 33 or 35 or 42 or 26 or 27:
-                range = 15;
-                break;
+#region ACTIONS AND COOLDOWNS
+    // Execute actions of their respective type in-game
+    public static unsafe void ExecuteActionGeneral(uint actionID) => ActionManager.Instance()->UseAction(ActionType.GeneralAction, actionID);
+    public static unsafe void ExecuteAction(uint actionID) => ActionManager.Instance()->UseAction(ActionType.Action, actionID);
+    public static unsafe void ExecuteKeyAction(uint actionID) => ActionManager.Instance()->UseAction(ActionType.KeyItem, actionID);
 
-            default:
-                range = 2.5f;
-                break;
-        }
-        return range;
-    }
-    public static void Print()
+    // Returns if the actions if off cooldown of their respective type
+    public static unsafe bool IsOffCooldown(uint actionID) => ActionManager.Instance()->IsActionOffCooldown(ActionType.Action, actionID);
+    public static unsafe bool IsOffCooldownKey(uint actionID) => ActionManager.Instance()->IsActionOffCooldown(ActionType.KeyItem, actionID);
+
+    // Gets the recast timer of certain actions respective of their type
+    public static unsafe float GetRecast(uint actionID) => ActionManager.Instance()->GetRecastTime(ActionType.Action, actionID);
+    public static unsafe float GetRecastKey(uint actionID) => ActionManager.Instance()->GetRecastTime(ActionType.KeyItem, actionID);
+    public static unsafe float GetRecastElasped(uint actionID) => ActionManager.Instance()->GetRecastTimeElapsed(ActionType.Action, actionID);
+    public static unsafe float GetRecastElaspedKey(uint actionID) => ActionManager.Instance()->GetRecastTimeElapsed(ActionType.KeyItem, actionID);
+
+#endregion ACTIONS AND COOLDOWNS
+
+#region ABANDONDUTY
+    // Leaves the current duty the player is in
+    private static readonly AbandonDuty ExitDuty = Marshal.GetDelegateForFunctionPointer<AbandonDuty>(Svc.SigScanner.ScanText("E8 ?? ?? ?? ?? 48 8B 43 28 41 B2 01"));
+    private delegate void AbandonDuty(bool a1);
+    public static void LeaveDuty() => ExitDuty(false);
+#endregion
+
+#region STATUS_CONDITIONS
+    // Returns if the player is currently available
+    public static bool PlayerNotBusy()
     {
-        if (PlayerState.Instance() != null)
-        {
-            var x = AgentHUD.Instance()->ExpContentLevel;
-            RunCommand($"e {x}");
-        }
-        if (FateManager.Instance()->CurrentFate != null)
-        {
-            var y = FateManager.Instance()->CurrentFate->MaxLevel;
-            RunCommand($"e {y}");
-        }
+        return Player.Available
+               && Player.Object.CastActionId == 0
+               && !IsOccupied()
+               && !Svc.Condition[ConditionFlag.Jumping]
+               && Player.Object.IsTargetable
+               && !Player.IsAnimationLocked;
     }
+
+    // Returns if the player is at the Bunny fate location
+    public static bool IsAtBunny()
+    {
+        var x = new Vector3(GetPlayerRawXPos(), GetPlayerRawYPos(), GetPlayerRawZPos());
+        if (IsPointInTriangle2D(x, PyrosCenterFatePoint, PyrosRightFatePoint, PyrosLeftFatePoint))
+            return true;
+        else
+            return false;
+    }
+
+    // Returns if the player is currently within level range of the Bunny fate
     public static bool Sync()
     {
         if (AgentHUD.Instance()->ExpContentLevel > FateManager.Instance()->CurrentFate->MaxLevel)
@@ -137,12 +129,15 @@ public static unsafe class Helpers
             return true;
     }
 
+    // Returns if the player is in a fate
     public static bool IsInFate()
     {
         if (FateManager.Instance()->CurrentFate != null)
             return true;
         return false;
     }
+
+    // Returns the name of the current fate
     public static string? NameFate()
     {
         if (IsInFate())
@@ -151,6 +146,7 @@ public static unsafe class Helpers
             return null;
     }
 
+    // Returns if the player is specifically in the Bunny fate
     public static bool IsInBunnyFate()
     {
         if (IsInFate())
@@ -160,13 +156,22 @@ public static unsafe class Helpers
             else
                 return false;
         }
-
         return false;
     }
 
-    public static TaskManagerConfiguration DConfig => new(timeLimitMS: 10 * 60 * 1000, abortOnTimeout: false);
-    internal static Random random = new Random();
+    // Returns if the player has a given status ID
+    public static bool HasStatus(uint status) => Svc.ClientState.LocalPlayer!.BattleChara()->GetStatusManager()->HasStatus(status);
 
+    // Returns if the player has the Bunny status
+    public static bool HasBunnyStatus() => HasStatus(BunnyStatusID);
+
+    // Returns if the player is currently swapping between zones
+    public static bool IsBetweenAreas => (Svc.Condition[ConditionFlag.BetweenAreas] || Svc.Condition[ConditionFlag.BetweenAreas51]);
+
+#endregion
+
+#region LOGGING
+    // Returns the log of a given chat box
     public static string GetChatLogText(AddonChatLogPanel* chatLogPanel)
     {
         if (chatLogPanel == null) return string.Empty;
@@ -177,6 +182,7 @@ public static unsafe class Helpers
         return chatTextNode->NodeText.ToString();
     }
 
+    // Returns if the given text matches "chatLog 0"
     public static bool MatchText(string text)
     {
         var ourChatLogPanel = (AddonChatLogPanel*)RaptureAtkUnitManager.Instance()->GetAddonByName("ChatLogPanel_0");
@@ -186,6 +192,7 @@ public static unsafe class Helpers
         return chatText.Contains(text);
     }
 
+    // Returns if the given text matches the toast currently on screen
     public static bool MatchTextToast(string text)
     {
         var toastText = P.filter.GetLastToast();
@@ -193,101 +200,61 @@ public static unsafe class Helpers
         return toastText.Contains(text);
     }
 
-    public static bool IsAtBunny()
-    {
-        var x = new Vector3(GetPlayerRawXPos(), GetPlayerRawYPos(), GetPlayerRawZPos());
-        if (IsPointInTriangle2D(x, PyrosCenterFatePoint, PyrosRightFatePoint, PyrosLeftFatePoint))
-            return true;
-        else
-            return false;
-    }
-
-#region ACTIONS AND COOLDOWNS
-    public static unsafe void ExecuteActionGeneral(uint actionID) => ActionManager.Instance()->UseAction(ActionType.GeneralAction, actionID);
-    public static unsafe void ExecuteAction(uint actionID) => ActionManager.Instance()->UseAction(ActionType.Action, actionID);
-    public static unsafe void ExecuteKeyAction(uint actionID) => ActionManager.Instance()->UseAction(ActionType.KeyItem, actionID);
-    public static unsafe bool IsOffCooldown(uint actionID) => ActionManager.Instance()->IsActionOffCooldown(ActionType.Action, actionID);
-    public static unsafe bool IsOnCooldown(uint actionID) => !(ActionManager.Instance()->IsActionOffCooldown(ActionType.Action, actionID));
-    public static unsafe bool IsOffCooldownKey(uint actionID) => ActionManager.Instance()->IsActionOffCooldown(ActionType.KeyItem, actionID);
-    public static unsafe bool IsOnCooldownKey(uint actionID) => !(ActionManager.Instance()->IsActionOffCooldown(ActionType.KeyItem, actionID));
-    public static unsafe float GetRecast(uint actionID) => ActionManager.Instance()->GetRecastTime(ActionType.Action, actionID);
-    public static unsafe float GetRecastKey(uint actionID) => ActionManager.Instance()->GetRecastTime(ActionType.KeyItem, actionID);
-    public static unsafe float GetRecastElasped(uint actionID) => ActionManager.Instance()->GetRecastTimeElapsed(ActionType.Action, actionID);
-    public static unsafe float GetRecastElaspedKey(uint actionID) => ActionManager.Instance()->GetRecastTimeElapsed(ActionType.KeyItem, actionID);
-
-#endregion ACTIONS AND COOLDOWNS
-    private static readonly AbandonDuty ExitDuty = Marshal.GetDelegateForFunctionPointer<AbandonDuty>(Svc.SigScanner.ScanText("E8 ?? ?? ?? ?? 48 8B 43 28 41 B2 01"));
-
-    private delegate void AbandonDuty(bool a1);
-    public static void RunCommand(string command)
-    {
-        ECommons.Automation.Chat.Instance.ExecuteCommand($"/{command}");
-    }
-
-    public static void LeaveDuty() => ExitDuty(false);
-
+    // Given message will be placed in the log
     public static void PLogInfo(string message)
     {
         PluginLog.Information(message);
     }
 
+    // Given message will be placed in debug window
     public static void PLogDebug(string message)
     {
         PluginLog.Debug(message);
     }
-
-    public static void FancyCheckmark(bool enabled)
-    {
-        if (!enabled)
-        {
-            FontAwesome.Print(ImGuiColors.DalamudRed, FontAwesome.Cross);
-        }
-        else if (enabled)
-        {
-            FontAwesome.Print(ImGuiColors.HealerGreen, FontAwesome.Check);
-        }
-    }
-
-    public static void FancyPluginUiString(bool PluginInstalled, string Text, string Url)
-    {
-        FancyCheckmark(PluginInstalled);
-        if (ImGui.IsItemHovered())
-        {
-            ImGui.BeginTooltip();
-            ImGui.Text("The following plugins are required to be installed and enabled: ");
-            PluginGreenRedText(PluginInstalled, Text);
-            ImGui.Text("Click to Copy Repo URL");
-            ImGui.EndTooltip();
-            if (ImGui.IsItemClicked())
-            {
-                ImGui.SetClipboardText(Url);
-                DuoLog.Information("Repo URL Copied");
-                Notify.Info("Repo URL Copied");
-            }
-        }
-        
-        ImGui.SameLine();
-    }
-
-    public static void PluginGreenRedText(bool PluginInstalled, string text)
-    {
-        if (PluginInstalled)
-            ImGui.TextColored(ImGuiColors.HealerGreen, $"- {text}");
-        else
-            ImGui.TextColored(ImGuiColors.DalamudRed, $"- {text}");
-    }
-
-    public static bool PlayerNotBusy()
-    {
-        return Player.Available
-               && Player.Object.CastActionId == 0
-               && !IsOccupied()
-               && !Svc.Condition[ConditionFlag.Jumping]
-               && Player.Object.IsTargetable
-               && !Player.IsAnimationLocked;
-    }
+#endregion LOGGING
 
 #region AUTOROTATION
+    // Toggles all automation commands in-game to be on
+    public static void ToggleRotationAI()
+    {
+        if (PluginInstalled("RotationSolver"))
+        {
+            RunCommand("rsr manual");
+            RunCommand("rotation settings HostileType 0");
+        }
+        RunCommand("bmrai on");
+        RunCommand("bmrai followcombat on");
+        RunCommand("bmrai followoutofcombat on");
+        RunCommand($"bmrai maxdistancetarget {SetAIRange()}");
+    }
+
+    // Toggles all automation commands in-game to be off
+    public static void ToggleRotationAIOff()
+    {
+        RunCommand("bmrai off");
+        RunCommand("rsr off");
+    }
+
+    // Sets the distance for the AI to walk to a target
+    public static float SetAIRange()
+    {
+        var x = GetClassJobID();
+        float range = 2.5f;
+        switch (x)
+        {
+            // All classes without close range AOE
+            case 7 or 25 or 33 or 35 or 42 or 26 or 27:
+                range = 15;
+                break;
+
+            default:
+                range = 2.5f;
+                break;
+        }
+        return range;
+    }
+
+    // Toggle Rotation using BM or BMR or Wrath instead of RSR
     public static void ToggleRotation(bool enable)
     {
         if (enable)
@@ -430,8 +397,10 @@ public static unsafe class Helpers
         }
     }
 
-#endregion WRATH
+    #endregion WRATH
 
+#region REPAIR
+    // Returns if the player's gear condition are under a certain threshold
     public static unsafe bool NeedsRepair(float below = 0)
     {
         var im = InventoryManager.Instance();
@@ -468,61 +437,17 @@ public static unsafe class Helpers
 
         return false;
     }
-
-    public static string GetRoleByNumber()
-    {
-        uint number = GetClassJobID();
-        switch (number)
-        {
-            // Tanks
-            case 19: // PLD
-            case 21: // WAR
-            case 32: // DRK
-            case 37: // GNB
-            // Melees
-            case 20: // MNK
-            case 22: // DRG
-            case 30: // NIN
-            case 39: // RPR
-            case 41: // VPR
-            // Range
-            case 23: // BRD
-            case 31: // MCH
-            case 38: // DNC
-                return "Melee";
-            // Healer
-            case 24: // WHM
-            case 28: // SCH
-            case 33: // AST
-            case 40: // SGE
-            // Caster
-            case 25: // BLM
-            case 27: // SMN
-            case 35: // RDM
-            case 42: // PCT
-                return "Caster";
-
-            default:
-                return "Unknown";
-        }
-    }
-
-    public static void SetBMRange(float range)
-    {
-        if (GetRoleByNumber() == "Melee")
-            P.bossmod.SetRange(3);
-        else if (GetRoleByNumber() == "Caster")
-            P.bossmod.SetRange(range);
-        else
-            P.bossmod.SetRange(2.5f);
-    }
+#endregion  INVENTORY
 
 #region AUTORETAINER
 
+    // Time in Unix
     public static int ToUnixTimestamp(this DateTime value) => (int)Math.Truncate(value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
-    public static bool ARAvailableRetainersCurrentCharacter() => P.autoRetainer.AreAnyRetainersAvailableForCurrentChara(); // old check gonna use the below now
+
+    // Uses autoreatiner API to return all characters in autoreatiner
     private static unsafe ParallelQuery<ulong> GetAllEnabledCharacters() => P.autoRetainerApi.GetRegisteredCharacters().AsParallel().Where(c => P.autoRetainerApi.GetOfflineCharacterData(c).Enabled);
 
+    // Returns if any retainers are completed on current character
     public static unsafe bool ARRetainersWaitingToBeProcessed(bool allCharacters = false)
     {
         return !allCharacters
@@ -530,6 +455,7 @@ public static unsafe class Helpers
             : GetAllEnabledCharacters().Any(character => P.autoRetainerApi.GetOfflineCharacterData(character).RetainerData.Any(x => x.HasVenture && x.VentureEndsAt <= DateTime.Now.ToUnixTimestamp()));
     }
 
+    // Returns if any submarines are completed on current character
     public static unsafe bool ARSubsWaitingToBeProcessed(bool allCharacters = false)
     {
         return !allCharacters
@@ -541,10 +467,12 @@ public static unsafe class Helpers
 
 #region INVENTORY
 
+    // Gets the total count of an object, accounts for NQ and HQ unless specified
     public static unsafe int GetItemCount(int itemID, bool includeHQ = true)
-   => includeHQ ? InventoryManager.Instance()->GetInventoryItemCount((uint)itemID, true) + InventoryManager.Instance()->GetInventoryItemCount((uint)itemID) + InventoryManager.Instance()->GetInventoryItemCount((uint)itemID + 500_000)
+    => includeHQ ? InventoryManager.Instance()->GetInventoryItemCount((uint)itemID, true) + InventoryManager.Instance()->GetInventoryItemCount((uint)itemID) + InventoryManager.Instance()->GetInventoryItemCount((uint)itemID + 500_000)
    : InventoryManager.Instance()->GetInventoryItemCount((uint)itemID) + InventoryManager.Instance()->GetInventoryItemCount((uint)itemID + 500_000);
 
+    // Gets the total number of free slots in a character's invetory
     public static unsafe int GetInventoryFreeSlotCount()
     {
         InventoryType[] types = [InventoryType.Inventory1, InventoryType.Inventory2, InventoryType.Inventory3, InventoryType.Inventory4];
@@ -559,6 +487,7 @@ public static unsafe class Helpers
         return slots;
     }
 
+    // Gets the total number of free slots in a containter within a character's inventory
     public static int GetFreeSlotsInContainer(int container)
     {
         var inv = InventoryManager.Instance();
@@ -574,33 +503,39 @@ public static unsafe class Helpers
 
 #region PlayerPositioning
 
+    // Returns the player's position in a 3D Vector
     public static Vector3 PlayerPosition()
     {
         var player = LPlayer();
         return player != null ? player->Position : default;
     }
-
+    
+    // Return the player's X position
     public static float GetPlayerRawXPos()
     {
         return Svc.ClientState.LocalPlayer!.Position.X;
     }
 
+    // Return the player's Y position
     public static float GetPlayerRawYPos()
     {
         return Svc.ClientState.LocalPlayer!.Position.Y;
     }
 
+    // Return the player's Z position
     public static float GetPlayerRawZPos()
     {
         return Svc.ClientState.LocalPlayer!.Position.Z;
     }
 
+    // Determines whether the player is within range of a set position given
     public static bool PlayerInRange(Vector3 dest, float dist)
     {
         var d = dest - PlayerPosition();
         return d.X * d.X + d.Z * d.Z <= dist * dist;
     }
 
+    // If the player is in combat, will move the player towards the current hostile targets
     internal unsafe static bool? MoveToCombat(Vector3 targetPosition, float toleranceDistance = 3f)
     {
         if (targetPosition.Distance(Player.GameObject->Position) <= toleranceDistance || Svc.Condition[ConditionFlag.InCombat])
@@ -616,6 +551,7 @@ public static unsafe class Helpers
         return false;
     }
 
+    // This checks if a player is within a certain trianular area, this ignores the player's elevation
     public static bool IsPointInTriangle2D(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
     {
         // Ignore the Y component and only work with X and Z
@@ -647,6 +583,7 @@ public static unsafe class Helpers
         return (u >= 0) && (v >= 0) && (u + v <= 1);
     }
 
+    // When given 3 points, will return a 3D Vector within that triangular shape
     public static Vector3 RandomPointInTriangle(Vector3 p1, Vector3 p2, Vector3 p3)
     {
         float r1 = (float)random.NextDouble();
@@ -663,6 +600,7 @@ public static unsafe class Helpers
         return (1 - r1 - r2) * p1 + r1 * p2 + r2 * p3;
     }
 
+    // This checks if the player is at the final boss location for the bunny fate
     public static bool IsPlayerAtBossLocation(Vector3 playerLocation)
     {
         Vector3 bossPosition = new Vector3(161.120f, 710.682f, 259.266f);
@@ -676,22 +614,28 @@ public static unsafe class Helpers
 #endregion PlayerPositioning
 
 #region Distance
+    // Finds the distance from two given positions
     private static float Distance(this Vector3 v, Vector3 v2)
     {
         return new Vector2(v.X - v2.X, v.Z - v2.Z).Length();
     }
+
+    // Returns if the player is currently moving or not
     public static unsafe bool IsMoving()
     {
         return AgentMap.Instance()->IsPlayerMoving == 1;
     }
 
+    // Returns the distance from the player to a given 3D vector
     internal static unsafe float GetDistanceToPlayer(Vector3 v3) => Vector3.Distance(v3, Player.GameObject->Position);
+    // Returns the distance from the player to a game object
     internal static unsafe float GetDistanceToPlayer(IGameObject gameObject) => GetDistanceToPlayer(gameObject.Position);
+    // Returns the distance from the player to a position given X, Y, Z
     public static float GetDistanceToPoint(float x, float y, float z) => Vector3.Distance(Svc.ClientState.LocalPlayer?.Position ?? Vector3.Zero, new Vector3(x, y, z));
-    public static float GetDistanceToVectorPoint(Vector3 location) => Vector3.Distance(Svc.ClientState.LocalPlayer?.Position ?? Vector3.Zero, location);
+    // Checks the distance from the player to the edge of the hitbox of an object
     public static unsafe float DistanceToHitboxEdge(float hitboxRadius, IGameObject gameObject) => GetDistanceToPlayer(gameObject) - hitboxRadius;
-    public static unsafe bool IsInMeleeRange(float hitboxRadius, IGameObject gameobject)
-        => DistanceToHitboxEdge(hitboxRadius, gameobject) < 2.5;
+    // Checks if the player is currently in melee range
+    public static unsafe bool IsInMeleeRange(float hitboxRadius, IGameObject gameobject) => DistanceToHitboxEdge(hitboxRadius, gameobject) < 2.5;
     #endregion Distance
 
 #region Targeting
@@ -790,8 +734,10 @@ public static unsafe class Helpers
         return false;
     }
 
-#endregion Targeting
+    #endregion Targeting
 
+#region UI
+    // GUI, creates a checkbox with a marker tooltip
     public static bool CheckboxWithTooltip(string label, ref bool value, string tooltip)
     {
         bool checkbox = ImGui.Checkbox(label, ref value);
@@ -802,17 +748,20 @@ public static unsafe class Helpers
         return checkbox;
     }
 
+    // Returns if a dalamud plugin is currently installed
     public static bool PluginInstalled(string name)
     {
         return DalamudReflector.TryGetDalamudPlugin(name, out _, false, true);
     }
 
-    public static bool IsAddonActive(string AddonName) // bunu kullan
+    // Returns if a dalamud addon is currently active
+    public static bool IsAddonActive(string AddonName)
     {
         var addon = RaptureAtkUnitManager.Instance()->GetAddonByName(AddonName);
         return addon != null && addon->IsVisible && addon->IsReady;
     }
 
+    // A notification given of the required plugins to run Bunnies
     public static void NotifyPlugins()
     {
         var x = "";
@@ -824,6 +773,67 @@ public static unsafe class Helpers
             x += "BossModReborn\n";
         Notify.Error($"Missing Required Plugins to run Bunnies \nRequired Plugins are \n{x}");
     }
+
+    // Starting task when loading the plugin
     public static string icurrentTask = "idle";
+
+    // Will update the task in the plugin's UI
     public static void UpdateCurrentTask(string task) { icurrentTask = task; }
+
+    // GUI, creates a check if a plugin is enabled and cross if a plugin is disabled.
+    public static void FancyCheckmark(bool enabled)
+    {
+        if (!enabled)
+        {
+            FontAwesome.Print(ImGuiColors.DalamudRed, FontAwesome.Cross);
+        }
+        else if (enabled)
+        {
+            FontAwesome.Print(ImGuiColors.HealerGreen, FontAwesome.Check);
+        }
+    }
+
+    // GUI, uses "FancyCheckmark" along with a tooltip for the cross and checks for the user to read
+    public static void FancyPluginUiString(bool PluginInstalled, string Text, string Url)
+    {
+        FancyCheckmark(PluginInstalled);
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.Text("The following plugins are required to be installed and enabled: ");
+            PluginGreenRedText(PluginInstalled, Text);
+            ImGui.Text("Click to Copy Repo URL");
+            ImGui.EndTooltip();
+            if (ImGui.IsItemClicked())
+            {
+                ImGui.SetClipboardText(Url);
+                DuoLog.Information("Repo URL Copied");
+                Notify.Info("Repo URL Copied");
+            }
+        }
+
+        ImGui.SameLine();
+    }
+
+    // Displays the plugin as red if it isn't install and green if it is installed.
+    public static void PluginGreenRedText(bool PluginInstalled, string text)
+    {
+        if (PluginInstalled)
+            ImGui.TextColored(ImGuiColors.HealerGreen, $"- {text}");
+        else
+            ImGui.TextColored(ImGuiColors.DalamudRed, $"- {text}");
+    }
+
+    // GUI, created selectable dropdown menus centered within the window
+    public static void DrawMainSelectables(string label, ref bool show, Vector2 vector, float textstart)
+    {
+        ImGui.SetCursorPosX(0);
+        if (ImGui.Selectable("##" + label, show, ImGuiSelectableFlags.None, vector))
+            show = !show;
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(textstart);
+        ImGui.Text(label);
+        ImGui.Spacing();
+    }
+    #endregion UI
 }

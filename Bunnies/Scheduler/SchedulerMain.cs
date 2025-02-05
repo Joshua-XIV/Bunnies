@@ -1,20 +1,10 @@
-using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Objects.Types;
-using ECommons.Automation.NeoTaskManager.Tasks;
 using ECommons.DalamudServices;
-using ECommons.EzEventManager;
 using ECommons.Logging;
-using ECommons.Throttlers;
-using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using FirstPlugin.IPC.Lifestream;
 using FirstPlugin.Scheduler.Handlers;
 using FirstPlugin.Scheduler.Tasks;
 using FirstPlugin.Ui.MainWindow;
 using System.Numerics;
-using System.Threading.Tasks;
 
 namespace FirstPlugin.Scheduler
 {
