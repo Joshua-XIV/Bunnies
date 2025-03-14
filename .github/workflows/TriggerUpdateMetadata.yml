@@ -1,11 +1,1 @@
-name: TriggerUpdateMetadata
-
-on:
-    workflow_dispatch:
-
-jobs:
-    TriggerUpdateMeta:
-        uses:
-            Joshua-XIV/MyDalamudPlugin/.github/workflows/Update_Metadata.yml@main
-
-#update/setup if i plan to make more plugins
+#update later
