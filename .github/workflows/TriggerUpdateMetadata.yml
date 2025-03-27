@@ -1,11 +1,18 @@
-name: TriggerUpdateMetadata
+name: Trigger Action on New Release
 
 on:
-    workflow_dispatch:
+  release:
+    types: [published]
+  workflow_dispatch:
 
 jobs:
-    TriggerUpdateMeta:
-        uses:
-            Joshua-XIV/MyDalamudPlugin/.github/workflows/Update_Metadata.yml@main
-
-#update/setup if i plan to make more plugins
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Repository Dispatch Event
+        run: |
+          curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.PAT }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          --data '{"event_type": "new-release"}' \
+          https://api.github.com/repos/Joshua-XIV/MyDalamudPlugin/dispatches
