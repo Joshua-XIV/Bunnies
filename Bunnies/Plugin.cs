@@ -100,11 +100,6 @@ public class Plugin : IDalamudPlugin
             settingsWindow.IsOpen = !settingsWindow.IsOpen;
         };
 
-        Svc.PluginInterface.UiBuilder.OpenConfigUi += () =>
-        {
-            debugWindow.IsOpen = !debugWindow.IsOpen;
-        };
-
         EzCmd.Add("/bunnies", OnCommand, 
                 """ 
                 - Opens plugin interace
@@ -129,6 +124,7 @@ public class Plugin : IDalamudPlugin
             SchedulerMain.Tick();
         }
     }
+
     public void Dispose()
     {
         this.filter.Dispose();

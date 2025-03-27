@@ -29,44 +29,37 @@ namespace FirstPlugin;
 
 public static unsafe class Helpers
 {
-    // Runs a slash command in-game
     public static void RunCommand(string command)
     {
         ECommons.Automation.Chat.Instance.ExecuteCommand($"/{command}");
     }
 
-    // Returns the current amount of gil the player has
+    // Returns the current amount of gil the player has in their inventory
     public static unsafe uint GetGil() => InventoryManager.Instance()->GetGil();
 
     // Returns closest object to player by name
     internal static IGameObject? GetObjectByName(string name) => Svc.Objects.OrderBy(GetDistanceToPlayer).FirstOrDefault(o => o.Name.TextValue.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 
-    // Returns the player's current grand company
     public static byte GetPlayerGC() => UIState.Instance()->PlayerState.GrandCompany;
 
     // Instance of the player
     public static GameObject* LPlayer() => GameObjectManager.Instance()->Objects.IndexSorted[0].Value;
 
-    // Gets the current class ID of the player
     public static uint GetClassJobID() => Svc.ClientState.LocalPlayer!.ClassJob.RowId;
 
     // Config for the timeout limit of task enqueueing
     public static TaskManagerConfiguration DConfig => new(timeLimitMS: 10 * 60 * 1000, abortOnTimeout: false);
 
-    // Instance of random
     internal static Random random = new Random();
 
 #region ZONES_WORLD
-    // Returns the current world the player is in
     public static uint GetCurrentWorld() => Svc.ClientState.LocalPlayer?.CurrentWorld.RowId ?? 0;
 
-    // Returns the player's home world
+    // Returns the current player's home world
     public static uint GetHomeWorld() => Svc.ClientState.LocalPlayer?.HomeWorld.RowId ?? 0;
 
-    // Returns the ID of the zone the player is current in
     public static uint CurrentZoneID() => Svc.ClientState.TerritoryType;
 
-    // Returns if the Zone ID matches the given ID in the paramter
     public static bool IsInZone(uint zoneID) => Svc.ClientState.TerritoryType == zoneID;
 #endregion
 
@@ -107,7 +100,6 @@ public static unsafe class Helpers
                && !Player.IsAnimationLocked;
     }
 
-    // Returns if the player is at the Bunny fate location
     public static bool IsAtBunny()
     {
         var x = new Vector3(GetPlayerRawXPos(), GetPlayerRawYPos(), GetPlayerRawZPos());
@@ -129,7 +121,6 @@ public static unsafe class Helpers
             return true;
     }
 
-    // Returns if the player is in a fate
     public static bool IsInFate()
     {
         if (FateManager.Instance()->CurrentFate != null)
@@ -137,7 +128,6 @@ public static unsafe class Helpers
         return false;
     }
 
-    // Returns the name of the current fate
     public static string? NameFate()
     {
         if (IsInFate())
@@ -146,7 +136,6 @@ public static unsafe class Helpers
             return null;
     }
 
-    // Returns if the player is specifically in the Bunny fate
     public static bool IsInBunnyFate()
     {
         if (IsInFate())
@@ -162,7 +151,6 @@ public static unsafe class Helpers
     // Returns if the player has a given status ID
     public static bool HasStatus(uint status) => Svc.ClientState.LocalPlayer!.BattleChara()->GetStatusManager()->HasStatus(status);
 
-    // Returns if the player has the Bunny status
     public static bool HasBunnyStatus() => HasStatus(BunnyStatusID);
 
     // Returns if the player is currently swapping between zones
@@ -417,7 +405,7 @@ public static unsafe class Helpers
             return false;
         }
 
-        if (equipped->Loaded == 0)
+        if (!equipped->IsLoaded)
         {
             Svc.Log.Error($"InventoryContainer is not loaded");
             return false;
@@ -623,7 +611,7 @@ public static unsafe class Helpers
     // Returns if the player is currently moving or not
     public static unsafe bool IsMoving()
     {
-        return AgentMap.Instance()->IsPlayerMoving == 1;
+        return AgentMap.Instance()->IsPlayerMoving;
     }
 
     // Returns the distance from the player to a given 3D vector

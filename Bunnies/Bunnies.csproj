@@ -4,11 +4,13 @@
     <Import Project="Dalamud.Plugin.Bootstrap.targets" />
 
     <PropertyGroup>
-    <Version>0.1.0.1</Version>
+    <Version>0.1.0.2</Version>
     <Description>Fun Personal Project for Automating Bunnies</Description>
     <PackageProjectUrl>https://github.com/Joshua-XIV</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <IsPackable>false</IsPackable>
+    <LangVersion>preview</LangVersion>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
@@ -29,6 +31,12 @@
         <ProjectReference Include="..\AutoRetainerAPI\AutoRetainerAPI\AutoRetainerAPI.csproj" />
         <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="InteropGenerator.Runtime">
+            <HintPath>$(DALAMUD_HOME)\InteropGenerator.Runtime.dll</HintPath>
+        </Reference>
+    </ItemGroup>
     
     <ItemGroup>
     <None Update="Bunnies.json">
@@ -40,6 +48,10 @@
         <Content Include="..\Bunnies\Bunnies.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Update="DalamudPackager" Version="12.0.0" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

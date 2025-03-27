@@ -14,7 +14,7 @@ namespace FirstPlugin.Scheduler.Tasks
 
         private static unsafe bool IsMoving()
         {
-            return AgentMap.Instance()->IsPlayerMoving == 1;
+            return AgentMap.Instance()->IsPlayerMoving;
         }
 
         internal unsafe static void Enqueue(Vector3 targetPosition, string destination, float toleranceDistance = 3f)

@@ -6,11 +6,8 @@
     "InternalName": "Bunnies",
     "ApplicableVersion": "any",
     "AssemblyVersion": "0.1.0.1",
-    "DalamudApiLevel": 11,
-    "Tags": [ "Bunnies, Eureka", "Gil", "Pyros" ],
+    "DalamudApiLevel": 12,
+    "Tags": [ "Bunnies", "Eureka", "Gil", "Pyros" ],
     "IconUrl": "https://raw.githubusercontent.com/Joshua-XIV/Bunnies/master/Bunnies/Resources/Images/bunnyMudra.png",
-    "RepoUrl": "https://github.com/Joshua-XIV/Bunnies",
-    "DownloadLinkInstall": "https://github.com/Joshua-XIV/Bunnies/releases/download/0.1.0.1/latest.zip",
-    "DownloadLinkTesting": "https://github.com/Joshua-XIV/Bunnies/releases/download/0.1.0.1/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/Joshua-XIV/Bunnies/releases/download/0.1.0.1/latest.zipp"
+    "RepoUrl": "https://github.com/Joshua-XIV/Bunnies"
 }
