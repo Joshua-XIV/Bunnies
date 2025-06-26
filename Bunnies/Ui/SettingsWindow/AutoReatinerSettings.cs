@@ -52,14 +52,16 @@ namespace FirstPlugin.Ui.SettingsWindow
                     C.enableRetainers = EnableRetainers;
                 }
 
+                // Enables submarine support for this character.
                 if (Helpers.CheckboxWithTooltip("Enable Submarine Support", ref EnableSubs,
-                "Enables submarine support for this character."))
+                "Currently Not Supported!"))
                 {
                     C.enableSubs = EnableSubs;
                 }
 
+                // Enables multi support after completion of looping Bunnies
                 if (Helpers.CheckboxWithTooltip("Enable Multi Support", ref EnableMulti,
-                "Enables multi support after completion of looping Bunnies."))
+                "Currently Not Supported!"))
                 {
                     C.enableMulti = EnableMulti;
                 }

@@ -1,3 +1,4 @@
+using ECommons.ChatMethods;
 using ECommons.DalamudServices;
 using ECommons.Logging;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -39,10 +40,10 @@ namespace FirstPlugin.Scheduler
                 HadAutoInteractOn = true;
                 P.pandora.SetFeatureEnabled("Auto-interact with Objects in Instances", false);
             }
-            if (PluginInstalled("RotationSolver"))
+            /*if (PluginInstalled("RotationSolver"))
             {
                 RunCommand("rsr settings AutoOpenChest false");
-            }
+            }*/
             StartBunnies.IsRunning = true;
             BunniesRun = true;
             DoWeTick = true;
