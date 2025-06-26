@@ -4,7 +4,7 @@
     <Import Project="Dalamud.Plugin.Bootstrap.targets" />
 
     <PropertyGroup>
-    <Version>0.1.0.3</Version>
+    <Version>0.1.0.4</Version>
     <Description>Fun Personal Project for Automating Bunnies</Description>
     <PackageProjectUrl>https://github.com/Joshua-XIV</PackageProjectUrl>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>

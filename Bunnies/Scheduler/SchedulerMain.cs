@@ -116,7 +116,7 @@ namespace FirstPlugin.Scheduler
                                 }
                                 P.taskManager.Enqueue(DisablePlugin);
                             }
-                            else if (ARRetainersWaitingToBeProcessed() && C.enableRetainers && !HasBunnyStatus() && !IsInBunnyFate())
+                            else if (C.enableRetainers && ARRetainersWaitingToBeProcessed() && !HasBunnyStatus() && !IsInBunnyFate())
                             {
                                 P.taskManager.Enqueue(() => UpdateCurrentTask("Resending Retainers"));
                                 if (CurrentZoneID() == Pagos || CurrentZoneID() == Pyros || CurrentZoneID() == Hydatos)
@@ -211,11 +211,11 @@ namespace FirstPlugin.Scheduler
                                 DisablePlugin();
                             }
                         }
-                        else if (!ARRetainersWaitingToBeProcessed() && (TryGetAddonByName<AtkUnitBase>("RetainerList", out var RetainerAddon) && IsAddonReady(RetainerAddon)))
+                        else if (TryGetAddonByName<AtkUnitBase>("RetainerList", out var RetainerAddon) && IsAddonReady(RetainerAddon) && !ARRetainersWaitingToBeProcessed())
                         {
                             TaskGetOut.Enqueue();
                         }
-                        else if (IsInZone(Kugane) && ARRetainersWaitingToBeProcessed() && C.enableRetainers)
+                        else if (IsInZone(Kugane) && C.enableRetainers && ARRetainersWaitingToBeProcessed())
                         {
                             var closest = AethernetData.Distances.OrderBy(x => x.distance).First();
                             P.taskManager.Enqueue(() => UpdateCurrentTask("Resending Retainers"));
@@ -267,7 +267,7 @@ namespace FirstPlugin.Scheduler
                         else if (!IsInZone(Kugane))
                         {
                             TaskTeleportKugane.Enqueue();
-                            if (ARRetainersWaitingToBeProcessed() && C.enableRetainers)
+                            if (C.enableRetainers && ARRetainersWaitingToBeProcessed())
                             {
                                 P.taskManager.Enqueue(() => UpdateCurrentTask("Resending Retainers"));
                                 TaskUseAethernet.Enqueue("Kogane Dori Markets");
