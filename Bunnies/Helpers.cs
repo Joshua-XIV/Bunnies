@@ -438,6 +438,8 @@ public static unsafe class Helpers
     // Returns if any retainers are completed on current character
     public static unsafe bool ARRetainersWaitingToBeProcessed(bool allCharacters = false)
     {
+        if (!PluginInstalled("AutoRetainer")) return false;
+        if (!C.enableRetainers) return false;
         return !allCharacters
             ? P.autoRetainerApi.GetOfflineCharacterData(Svc.ClientState.LocalContentId).RetainerData.AsParallel().Any(x => x.HasVenture && x.VentureEndsAt <= DateTime.Now.ToUnixTimestamp())
             : GetAllEnabledCharacters().Any(character => P.autoRetainerApi.GetOfflineCharacterData(character).RetainerData.Any(x => x.HasVenture && x.VentureEndsAt <= DateTime.Now.ToUnixTimestamp()));
@@ -446,6 +448,8 @@ public static unsafe class Helpers
     // Returns if any submarines are completed on current character
     public static unsafe bool ARSubsWaitingToBeProcessed(bool allCharacters = false)
     {
+        if (!PluginInstalled("AutoRetainer")) return false;
+        if (!C.enableRetainers) return false;
         return !allCharacters
             ? P.autoRetainerApi.GetOfflineCharacterData(Svc.ClientState.LocalContentId).OfflineSubmarineData.AsParallel().Any(x => x.ReturnTime <= DateTime.Now.ToUnixTimestamp())
             : GetAllEnabledCharacters().Any(c => P.autoRetainerApi.GetOfflineCharacterData(c).OfflineSubmarineData.Any(x => x.ReturnTime <= DateTime.Now.ToUnixTimestamp()));
