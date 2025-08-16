@@ -3,7 +3,7 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using ECommons.ImGuiMethods;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using System.Numerics;
 using Dalamud.Interface;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -126,7 +126,7 @@ internal class MainWindow : Window
             C.hasUpdatedStats = true;
         }
 
-        ImGui.Columns(3, null, false);
+        ImGui.Columns(3, "", false);
 
         // Top Middle
         ImGui.NextColumn();
@@ -135,7 +135,7 @@ internal class MainWindow : Window
         ImGuiHelpers.ScaledDummy(10f);
 
         // Setting up columns for stats
-        ImGui.Columns(2,null, false);
+        ImGui.Columns(2, "", false);
 
         // Dictionary for Iteration
         var totalStats = new Dictionary<string, int>
@@ -157,7 +157,7 @@ internal class MainWindow : Window
             ImGui.NextColumn();
         }
 
-        ImGui.Columns(1, null, false);
+        ImGui.Columns(1, "", false);
         ImGui.Dummy(new Vector2(0, 20));
     }
 
@@ -168,7 +168,7 @@ internal class MainWindow : Window
             C.hasUpdatedStats = true;
         }
 
-        ImGui.Columns(3, null, false);
+        ImGui.Columns(3, "", false);
 
         // Top Middle
         ImGui.NextColumn();
@@ -177,7 +177,7 @@ internal class MainWindow : Window
         ImGuiHelpers.ScaledDummy(10f);
 
         // Setting up columns for stats
-        ImGui.Columns(2, null, false);
+        ImGui.Columns(2, "", false);
 
         var PagosStats = new Dictionary<string, int>
         {
@@ -196,7 +196,7 @@ internal class MainWindow : Window
             ImGui.NextColumn();
         }
 
-        ImGui.Columns(1, null, false);
+        ImGui.Columns(1, "", false);
     }
 
     private void DrawPyrosStats(PyrosStats stats)
@@ -206,7 +206,7 @@ internal class MainWindow : Window
             C.hasUpdatedStats = true;
         }
 
-        ImGui.Columns(3, null, false);
+        ImGui.Columns(3, "", false);
 
         // Top Middle
         ImGui.NextColumn();
@@ -215,7 +215,7 @@ internal class MainWindow : Window
         ImGuiHelpers.ScaledDummy(10f);
 
         // Setting up columns for stats
-        ImGui.Columns(2, null, false);
+        ImGui.Columns(2, "", false);
 
         var PyrosStats = new Dictionary<string, int>
         {
@@ -234,7 +234,7 @@ internal class MainWindow : Window
             ImGui.NextColumn();
         }
 
-        ImGui.Columns(1, null, false);
+        ImGui.Columns(1, "", false);
     }
 
     private void DrawHydtosStats(HydatosStats stats)
@@ -244,7 +244,7 @@ internal class MainWindow : Window
             C.hasUpdatedStats = true;
         }
 
-        ImGui.Columns(3, null, false);
+        ImGui.Columns(3, "", false);
 
         // Top Middle
         ImGui.NextColumn();
@@ -253,7 +253,7 @@ internal class MainWindow : Window
         ImGuiHelpers.ScaledDummy(10f);
 
         // Setting up columns for stats
-        ImGui.Columns(2, null, false);
+        ImGui.Columns(2, "", false);
 
         var HydatosStats = new Dictionary<string, int>
         {
@@ -271,7 +271,7 @@ internal class MainWindow : Window
             ImGui.NextColumn();
         }
 
-        ImGui.Columns(1, null, false);
+        ImGui.Columns(1, "", false);
     }
 
     public override void Draw()
