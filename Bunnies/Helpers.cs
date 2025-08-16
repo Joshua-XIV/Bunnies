@@ -11,7 +11,7 @@ using ECommons.ImGuiMethods;
 using ECommons.Logging;
 using ECommons.Reflection;
 using ECommons.Throttlers;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;

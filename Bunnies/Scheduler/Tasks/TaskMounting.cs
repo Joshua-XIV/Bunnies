@@ -21,7 +21,7 @@ namespace FirstPlugin.Scheduler.Tasks
 
             if (CurrentZoneID() == Pagos ||  CurrentZoneID() == Pyros || CurrentZoneID() == Hydatos)
             {
-                if (!Svc.Condition[ConditionFlag.Casting] && !Svc.Condition[ConditionFlag.Unknown57] && PlayerNotBusy())
+                if (!Svc.Condition[ConditionFlag.Casting] && !Svc.Condition[ConditionFlag.MountOrOrnamentTransition] && PlayerNotBusy())
                 {
                     ActionManager.Instance()->UseAction(ActionType.GeneralAction, 24);
                 }
